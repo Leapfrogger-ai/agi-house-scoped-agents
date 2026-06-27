@@ -79,3 +79,30 @@ def test_bad_task_reprompts(tmp_path):
     _verified(reg)
     reply = conversation.handle(PHONE, "buy some stuff", reg)
     assert "🤔" in reply
+
+
+def test_budget_command_changes_enforcement(tmp_path):
+    reg = _reg(tmp_path)
+    _verified(reg)
+    # default $50 budget denies $80
+    assert "🛑" in conversation.handle(PHONE, "buy $80 from Acme", reg)
+    # raise budget, then the same task is allowed
+    assert "Budget set to *$100*" in conversation.handle(PHONE, "budget 100", reg)
+    assert reg.get_by_phone(PHONE).budget_cents == 10000
+    assert "Paid" in conversation.handle(PHONE, "buy $80 from Acme", reg)
+
+
+def test_allow_command_changes_enforcement(tmp_path):
+    reg = _reg(tmp_path)
+    _verified(reg)
+    assert "🛑" in conversation.handle(PHONE, "buy $20 from Staples", reg)
+    reply = conversation.handle(PHONE, "allow Acme, Staples", reg)
+    assert "Staples" in reply and reg.get_by_phone(PHONE).vendor_allowlist == ["Acme", "Staples"]
+    assert "Paid" in conversation.handle(PHONE, "buy $20 from Staples", reg)
+
+
+def test_view_only_commands(tmp_path):
+    reg = _reg(tmp_path)
+    _verified(reg)
+    assert "$50" in conversation.handle(PHONE, "budget", reg)
+    assert "Acme" in conversation.handle(PHONE, "allow", reg)

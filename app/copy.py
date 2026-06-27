@@ -12,11 +12,44 @@ def claim_prompt(agent_id: str) -> str:
     return f"👋 New agent incoming! You're claiming *{agent_id}*.\nReply with a name to lock it in."
 
 
-def owned(name: str) -> str:
+def _money(cents: int) -> str:
+    """120000 -> '1,200', 3000 -> '30', 9950 -> '99.50'. Whole amounts drop the cents."""
+    s = f"{cents / 100:,.2f}"
+    return s[:-3] if s.endswith(".00") else s
+
+
+def _bold_list(vendors: list[str]) -> str:
+    return ", ".join(f"*{v}*" for v in vendors) if vendors else "*none*"
+
+
+def owned(name: str, budget_cents: int, vendors: list[str]) -> str:
     return (
-        f"✅ Done — you own *{name}*, and your number is the key 🔑\n"
-        'Text me a task, like "buy 50 staples from Acme".'
+        f"✅ Done — you own *{name}* 🔑\n"
+        f"Starting limits: budget *${_money(budget_cents)}*, vendors {_bold_list(vendors)}.\n"
+        'Change anytime: "budget 100" or "allow Acme, Staples".\n'
+        'Text a task like "buy $30 from Acme".'
     )
+
+
+# --- Settings commands (budget / allowlist) ---
+def budget_set(cents: int) -> str:
+    return f"💰 Budget set to *${_money(cents)}*."
+
+
+def budget_show(cents: int) -> str:
+    return f"💰 Your budget is *${_money(cents)}*."
+
+
+def allow_set(vendors: list[str]) -> str:
+    return f"🔒 Approved vendors: {_bold_list(vendors)}."
+
+
+def allow_show(vendors: list[str]) -> str:
+    return f"🔒 Approved vendors: {_bold_list(vendors)}."
+
+
+BUDGET_HINT = '🤔 Try "budget 100" — a dollar amount.'
+ALLOW_HINT = '🤔 Try "allow Acme, Staples".'
 
 
 def receipt(vendor: str, dollars: str, remaining: str, charge_id: str) -> str:

@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import re
 
-from app import copy
+from app import copy, settings
 from app.registry import (
     AWAITING_NAME,
     READY,
@@ -51,12 +51,19 @@ def handle(phone: str, text: str, registry: Registry | None = None) -> str:
         record.verified = True
         record.state = READY
         registry.upsert(record)
-        return copy.owned(record.name)
+        return copy.owned(record.name, record.budget_cents, record.vendor_allowlist)
 
-    # READY: a verified owner. Purchase intent -> delegate; anything else -> greet (J4/Story 1.6).
+    # READY: a verified owner. Settings command -> apply; purchase intent -> delegate;
+    # anything else -> greet (J4/Story 1.6).
     if record.state == READY:
         if text.upper() == "CLAIM":
             return copy.ALREADY_OWN.format(name=record.name)
+        try:
+            cmd = settings.parse_settings_command(text)
+        except settings.SettingsError as hint:
+            return str(hint)
+        if cmd is not None:
+            return settings.apply(record, cmd, registry)
         if _PURCHASE.search(text):
             return delegate(record, text)
         return copy.welcome_back(record.name or record.agent_id)
