@@ -38,7 +38,14 @@ def delegate(record: OwnerRecord, text: str) -> str:
     except ParseError:
         return copy.BAD_TASK
 
-    if config.daytona_configured and config.op_configured:
+    # Deterministic policy gate at the orchestrator: a denial is decided HERE, instantly,
+    # and no sandbox is ever spun for an out-of-policy task (NFR003 + NFR004 — containment
+    # so complete the denied task gets no runtime). The same gate runs again inside the
+    # sandbox on the allowed path, as defense-in-depth.
+    verdict = evaluate(manifest)
+    if not verdict.allowed:
+        result = ChargeResult("denied", verdict.reason, charge_id=None, sandbox_id=None, simulated=False)
+    elif config.daytona_configured and config.op_configured:
         from app.sandbox import run_charge
 
         result = run_charge(manifest)

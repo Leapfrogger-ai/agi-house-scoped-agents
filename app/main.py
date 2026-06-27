@@ -5,6 +5,8 @@ Railway runs this via the Procfile; its logs are the live audit stream at demo t
 """
 from __future__ import annotations
 
+from xml.sax.saxutils import escape
+
 from fastapi import FastAPI, Request, Response
 from pydantic import BaseModel
 
@@ -43,11 +45,10 @@ def sim(msg: SimMessage) -> dict:
 
 @app.post("/webhook")
 async def webhook(request: Request) -> Response:
-    """Twilio posts an inbound WhatsApp message here; we reply on the same channel."""
+    """Twilio posts an inbound WhatsApp message here; we reply with TwiML so Twilio
+    delivers the response on the same thread — no outbound API call or auth required."""
     form = dict(await request.form())
-    adapter = get_adapter()
-    inbound = adapter.parse_inbound(form)
+    inbound = get_adapter().parse_inbound(form)
     reply = conversation.handle(inbound.from_phone, inbound.text)
-    adapter.send(inbound.from_phone, reply)
-    # Empty TwiML — we already sent via the REST API, so no body reply needed.
-    return Response(content="<Response></Response>", media_type="application/xml")
+    twiml = f"<Response><Message>{escape(reply)}</Message></Response>"
+    return Response(content=twiml, media_type="application/xml")

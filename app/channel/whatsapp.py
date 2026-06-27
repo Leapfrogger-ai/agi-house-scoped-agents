@@ -11,16 +11,22 @@ from app.config import config
 
 class WhatsAppAdapter:
     def __init__(self) -> None:
-        from twilio.rest import Client
+        self._client = None  # lazily built — inbound parsing needs no Twilio auth
 
-        self._client = Client(config.twilio_sid, config.twilio_token)
+    def _twilio(self):
+        if self._client is None:
+            from twilio.rest import Client
+
+            self._client = Client(config.twilio_sid, config.twilio_token)
+        return self._client
 
     def parse_inbound(self, req: dict) -> Inbound:
         # req = parsed form fields from Twilio's webhook POST.
         return Inbound(from_phone=req.get("From", ""), text=req.get("Body", ""))
 
     def send(self, to_phone: str, text: str) -> None:
-        self._client.messages.create(
+        # The webhook replies via TwiML (no outbound call); this is for proactive sends.
+        self._twilio().messages.create(
             from_=config.twilio_from,
             to=to_phone if to_phone.startswith("whatsapp:") else f"whatsapp:{to_phone}",
             body=text,
