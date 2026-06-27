@@ -50,6 +50,8 @@ def _run_in_daytona(manifest: IntentManifest) -> ChargeResult:
                     "OP_SERVICE_ACCOUNT_TOKEN": config.op_token or "",
                     "OP_VAULT": config.op_vault,
                     "MANIFEST_JSON": manifest.model_dump_json(),
+                    "STRIPE_MODE": config.stripe_mode,
+                    "VENDOR_ROSTER": config.vendor_roster_json,
                 },
             )
         )

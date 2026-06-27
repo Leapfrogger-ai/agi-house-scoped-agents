@@ -17,6 +17,12 @@ class Config:
     op_token: str | None = os.getenv("OP_SERVICE_ACCOUNT_TOKEN") or None
     op_vault: str = os.getenv("OP_VAULT", "agent-identity")
 
+    # Stripe charge routing. "simple" = card charge into the platform (proven default).
+    # "connect" = destination charge that routes funds to the vendor's connected account
+    # (requires Connect enabled + a populated VENDOR_ROSTER). See app/vendors.py.
+    stripe_mode: str = os.getenv("STRIPE_MODE", "simple")
+    vendor_roster_json: str = os.getenv("VENDOR_ROSTER", "{}")  # {"Acme":"acct_...",...}
+
     # Daytona
     daytona_api_key: str | None = os.getenv("DAYTONA_API_KEY") or None
     # Default true (auto-destroy = the thesis). Set false for a demo where you want to

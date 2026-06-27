@@ -64,6 +64,10 @@ def denied_allowlist(vendor: str) -> str:
     return f"🛑 *{vendor}* isn't on your approved list, so I sat this one out. No charge."
 
 
+def denied_not_payable(vendor: str) -> str:
+    return f"🛑 *{vendor}* is approved, but I don't have a payout account for them yet. No charge."
+
+
 def welcome_back(name: str) -> str:
     return f"👋 Welcome back — *{name}* here. What's the task?"
 

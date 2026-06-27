@@ -24,6 +24,8 @@ separate from *authority to act* (runtime-resolved credential, in the sandbox).
 | Secrets (operational) | **Railway env vars** | Twilio/Nebius/Daytona/SA-token plumbing; the *demoed* secret stays in 1Password | All |
 | LLM (manifest parse) | **Nebius Token Factory**, `meta-llama/Llama-3.3-70B-Instruct` (alt `Qwen/Qwen2.5-7B-Instruct`) via `openai` client + JSON mode | Reliable structured extraction; OpenAI-compatible | Epic 2 |
 | Payments | **Stripe test mode** (PaymentIntent + `pm_card_visa`) | No real funds; one call | Epic 2 |
+| Payments routing | **`STRIPE_MODE`**: `simple` (default) or `connect` (destination charge → vendor connected account) | Realistic "money reached the named vendor"; allowlist=policy vs roster=routing | Epic 2 |
+| Operator view | **`/` two-up page** (chat thread + transactions) + `/sim` HTTP driver | Bare demo surface; curl-testable flow in prod | Demo |
 | Owner registry | **1Password vault item** per owner + **local JSON** cache/fallback | Identity registry in the vault; JSON keeps the loop fast/resilient | Epic 1 |
 | Policy gate | **Plain Python**, deterministic | Containment can't depend on model output | Epic 2 |
 | Audit | **JSONL to stdout** (+ file) | Railway log view is the demo's live audit stream; no OTel | Epic 2 |
@@ -45,8 +47,12 @@ claim-by-text/
 │   ├── registry.py          # owner records: 1P vault item + JSON fallback
 │   ├── manifest.py          # IntentManifest (pydantic) + Nebius parse(text)->manifest
 │   ├── policy.py            # evaluate(manifest) -> ALLOW | DENY(reason)  [deterministic]
+│   ├── settings.py          # budget/allowlist commands in READY (deterministic, no LLM)
+│   ├── vendors.py           # name -> connected-account roster (Connect routing; STRIPE_MODE)
 │   ├── sandbox.py           # Daytona create → run workload → destroy
-│   ├── audit.py             # emit(event) -> JSONL stdout + file
+│   ├── audit.py             # emit(event) -> JSONL stdout + file (+ operator store)
+│   ├── operator.py          # operator view: chat thread + transactions (served at "/")
+│   ├── store.py             # in-memory demo store for the operator view
 │   └── workload/
 │       └── execute_charge.py  # RUNS INSIDE DAYTONA: 1P resolve → gate → Stripe → audit → JSON out
 ├── run_mock.py              # local entrypoint using mock.py (offline demo backstop)
