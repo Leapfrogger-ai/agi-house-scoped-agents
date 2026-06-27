@@ -1,0 +1,72 @@
+# Vincent
+
+> Vincent is an open framework by Lit Protocol for building programmable, user-controlled agents and vaults. Developers ship agents that automate operations across blockchains, DeFi, and traditional apps, while users keep full custody of their assets and data through policy-enforced delegation.
+
+Vincent is built on Lit Protocol's decentralized key management (Programmable Key Pairs and Lit Actions). The core model has four parts: **Agent Wallets** (non-custodial accounts that delegate signing authority), **Abilities** (immutable functions defining what an app can do), **Policies** (programmable guardrails like spending limits and rate limits that gate every ability execution), and **Apps** (policy-governed automation packages a user approves on the Connect Page). Approvals and authorizations are tracked in an on-chain App Registry. Doc links below point at the source `.mdx` files in this repository; the `## Optional` section may be skipped when context is limited.
+
+## Getting Started
+
+- [README](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/README.md): Project overview, core concepts, and the developer/user flow
+- [Introduction](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/concepts/introduction/about.mdx): What Vincent is and why it exists
+- [Security model](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/concepts/introduction/security.mdx): Trust assumptions and how delegation stays safe
+- [Contributing](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/CONTRIBUTING.md): How to develop in this monorepo
+
+## Core Concepts
+
+- [Apps](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/concepts/apps/about.mdx): Policy-governed automation packages
+- [Abilities](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/concepts/abilities/about.mdx): Immutable functions an app can execute
+- [Policies](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/concepts/policies/about.mdx): User-defined guardrails enforced on every execution
+- [Wallets overview](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/concepts/wallets/about.mdx): Account and key model
+- [Agent wallets](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/concepts/wallets/agent-wallets.mdx): Non-custodial delegated signing accounts
+- [User accounts](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/concepts/wallets/user-accounts.mdx): How end users connect and authorize
+
+## Building Apps
+
+- [Explaining apps](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/app/explaining-apps.mdx): App architecture
+- [App starter kit](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/app/app-starter-kit.mdx): Scaffold a new app
+- [Creating an app](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/app/creating-an-app.mdx): Step-by-step app registration
+- [Authenticating users](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/app/authenticating-users.mdx): JWT-based delegation flow
+- [Publishing apps](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/app/publishing-apps.mdx): Ship to users
+- [Updating apps](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/app/updating-apps.mdx): Versioning live apps
+- [Migrating to production](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/app/migrating-to-production.mdx): Production checklist
+
+## Abilities
+
+- [Explaining abilities](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/ability/explaining-abilities.mdx): What abilities are and how they work
+- [Execute function](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/ability/execute-function.mdx): Authoring an ability's execution logic
+- [Parameter schemas](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/ability/parameter-schemas.mdx): Typed inputs for abilities
+- [Official abilities overview](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/ability/official-abilities/overview.mdx): Catalog of built-in abilities (Aave, Aerodrome, Uniswap, Morpho, deBridge, ERC-20 approval/transfer, EVM transaction signer)
+
+## Policies
+
+- [Explaining policies](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/ability/policy/explaining-policies.mdx): How guardrails are defined and enforced
+- [Evaluate function](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/ability/policy/evaluate-function.mdx): Pre-execution policy checks
+- [Commit function](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/ability/policy/commit-function.mdx): Post-execution state updates
+- [Official policies overview](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/ability/policy/official-policies/overview.mdx): Spending-limit and contract-whitelist policies
+
+## SDKs (source packages)
+
+- [app-sdk](https://github.com/LIT-Protocol/Vincent/tree/main/packages/libs/app-sdk): Integrate Vincent into an app; authenticate users and run abilities
+- [ability-sdk](https://github.com/LIT-Protocol/Vincent/tree/main/packages/libs/ability-sdk): Author custom Vincent abilities and policies
+- [contracts-sdk](https://github.com/LIT-Protocol/Vincent/tree/main/packages/libs/contracts-sdk): Read/write the on-chain App Registry
+- [registry-sdk](https://github.com/LIT-Protocol/Vincent/tree/main/packages/libs/registry-sdk): Registry client and types
+- [mcp-sdk](https://github.com/LIT-Protocol/Vincent/tree/main/packages/libs/mcp-sdk): Expose Vincent abilities over the Model Context Protocol
+
+## SDK API Reference
+
+- [ability-sdk reference](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/api-reference/ability-sdk/README.mdx): createVincentAbility, createVincentPolicy, contexts, and types
+- [app-sdk reference](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/api-reference/app-sdk/README.mdx): getVincentAbilityClient and ability-response helpers
+- [Hosted API docs](https://docs.heyvincent.ai/modules.html): Generated TypeDoc reference
+
+## Official Links
+
+- [Vincent Docs](https://docs.heyvincent.ai): Full hosted documentation
+- [Vincent Dashboard](https://dashboard.heyvincent.ai/): Register and manage apps
+- [DCA Demo](https://dca.heyvincent.ai/): Live dollar-cost-averaging example app
+
+## Optional
+
+- [CHANGELOG](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/CHANGELOG.md): Release history
+- [Wallet providers guide](https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/wallet-providers/introduction.mdx): Integrating Vincent as a wallet provider (install, fund, withdraw, uninstall flows)
+- [Telegram community](https://t.me/+aa73FAF9Vp82ZjJh): Support and discussion
+- [GitHub repository](https://github.com/LIT-Protocol/Vincent): Source code and issues

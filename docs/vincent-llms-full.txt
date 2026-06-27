@@ -1,0 +1,3263 @@
+# Vincent — Full Documentation
+
+> Vincent is an open framework by Lit Protocol for building programmable, user-controlled agents and vaults. Developers ship agents that automate operations across blockchains, DeFi, and traditional apps, while users keep full custody of their assets and data through policy-enforced delegation.
+
+This file inlines the full text of Vincent's core documentation for LLM consumption. Each section is the verbatim source of a docs page in the LIT-Protocol/Vincent repository.
+
+
+
+---
+
+# README
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/README.md
+
+# Hello, Vincent
+
+Vincent is an open framework for creating programmable, user controlled agents and vaults. Built on [Lit Protocol](https://developer.litprotocol.com/what-is-lit) and powered by decentralized key management and policy enforcement, Vincent enables secure delegation of both on-chain and off-chain actions without compromising user control.
+
+With Vincent, you can build agents that automate the execution of operations across smart contracts on crypto networks, traditional finance (TradFi), and e-commerce platforms—all while ensuring users retain full control over their assets and data.
+
+Powered by Lit’s [decentralized key management network](https://developer.litprotocol.com/resources/how-it-works) and smart contracts, Vincent is your gateway to the future of the automated, User-Owned Web.
+
+# Key Concepts
+
+## Vincent Agent Wallets
+
+Non-custodial accounts controlled by users and backed by Lit [Programmable Key Pairs (PKPs)](https://developer.litprotocol.com/user-wallets/pkps/overview), used to delegate signing authority to Vincent Apps during Ability execution.
+
+[Learn more](https://docs.heyvincent.ai/documents/Concepts.html#vincent-agent-wallet)
+
+## Vincent Abilities
+
+Vincent Abilities are immutable functions, built with [Lit Actions](https://developer.litprotocol.com/sdk/serverless-signing/overview), that define the specific operations a Vincent App can perform on behalf of users. Abilities can interact with blockchains, APIs, and databases but only execute when permitted by all active Vincent Policies configured by the user.
+
+[Learn more](https://docs.heyvincent.ai/documents/Ability_Developers.html)
+
+## Vincent Policies
+
+Vincent Policies are programmable guardrails that govern how and when Abilities can be executed. Built using Lit Actions, Policies enforce user-defined constraints like spending limits, multi-factor authentication, rate limits, or time-based access before any Ability can run.
+
+Each Policy has user-configurable parameters, supports on/off-chain data access, and can persist state across executions. Users define the exact conditions under which a Vincent App can act on their behalf and can update or revoke those conditions at any time.
+
+[Learn more](https://docs.heyvincent.ai/documents/Policy_Developers.html)
+
+## Vincent App
+
+Vincent Apps enable secure, policy-governed automation on behalf of users—without compromising custody or control. Users delegate specific on- and off-chain actions to your App via Vincent Abilities, each governed by user-configured Policies. Every action is explicitly authorized, auditable, and constrained to the boundaries set by the user.
+
+Apps are bundled as versioned packages and must be approved via the Connect Page before they can execute any actions.
+
+[Learn more](https://docs.heyvincent.ai/documents/App___Agent_Developers.html)
+
+## Connect Page
+
+The Connect Page is a standard interface where users review a Vincent App, approve its requested Abilities and Policies, and configure any policy parameters. Vincent Apps use the Connect page to authenticate their users and execute Abilities on their behalf.
+
+## On-chain App Registry
+
+The On-chain App Registry is a smart contract that tracks which Vincent Apps, Abilities, and Policies each user has authorized for their Agent Wallet, ensuring only Abilities authorized by the user can be executed by the specific Apps they've permitted to act on their behalf.
+
+# How It All Fits Together
+
+### Vincent Developer Workflow
+
+1. Registers a Vincent App using the [Vincent App Dashboard](https://dashboard.heyvincent.ai/), selecting the from the existing Abilities and Policies their App will use
+2. Optionally creates and publishes custom Abilities and Policies tailored to their App’s functionality
+3. Integrates the Vincent App SDK to authenticate users and redirect them to the Vincent Connect Page for delegation
+4. Executes Abilities on behalf of authenticated users, governed by the Vincent Policies each user has configured for their App
+
+### Vincent User Workflow
+
+1. Visits a Vincent App and is redirected to the Vincent Connect Page to log in or create their Agent Wallet
+2. Reviews the App’s requested Abilities, configures Policy parameters, and approves the delegation
+3. Is redirected back to the App with a signed Vincent JWT, enabling the App to execute the approved Abilities on their behalf within the user’s configured Policy limits
+
+# Why Vincent?
+
+Vincent optimizes for security, interoperability, and user-control to redefine how agents interact across Web3 and beyond:
+
+- **Decentralized Key Management**: Vincent leverages Lit Protocol's [Programmable Key Pairs](https://developer.litprotocol.com/user-wallets/pkps/overview) (PKPs) to securely manage agent identities without exposing private keys.
+- **Verifiable, Fine-Grained Policies**: Users have full control over the policies they set and can revoke them at any time. Policies are fine-grained to specific operations and verifiable on-chain.
+- **Cross-Platform Automation**: With Vincent, agents can operate seamlessly across any blockchain or off-chain platform. Build agent-powered apps and abilities for DeFi, TradFi, E-Commerce, and more.
+- **Agent Marketplace**: Vincent will eventually serve as a marketplace for Vincent-powered apps and abilities, enabling them to be discovered and interacted with by end users.
+- **Open Source**: Fork, customize, and contribute to the [Vincent codebase](https://github.com/LIT-Protocol/Vincent) to shape the future of the agent-driven and user-controlled Web.
+
+# Useful Links
+
+- [Vincent Docs](https://docs.heyvincent.ai/modules.html)
+- [Automated Dollar-Cost Averaging Demo](https://dca.heyvincent.ai/)
+- [Telegram Community](https://t.me/+aa73FAF9Vp82ZjJh)
+
+# Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for setup instructions and development guidelines.
+
+
+---
+
+# Concept: Introduction
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/concepts/introduction/about.mdx
+
+---
+title: 'About'
+---
+
+Vincent is an automation and delegation platform that enables secure bridging and transactions across Solana, EVM, and native Bitcoin for your service, application, or AI Agent. The platform is powered by [Lit Protocol's](https://www.litprotocol.com/) first-of-its-kind decentralized Multi-Party Computation Threshold Signature Scheme (MPC-TSS) and Trusted Execution Environment (TEE) network.
+
+Get started building a Vincent App today with the [Creating an App](/app/creating-an-app) guide.
+
+## Potential Use Cases
+
+<Columns cols={3}>
+  <Card title="DCA Bots" icon="clock" color="#FF4205">
+    Automated recurring purchases with spend limits
+  </Card>
+  <Card title="Portfolio Rebalancers" icon="chart-pie" color="#FF4205">
+    Auto-rebalance portfolios with policy constraints
+  </Card>
+  <Card title="Arbitrage Agents" icon="chart-line" color="#FF4205">
+    Execute profitable trades across DEXs and CEXs
+  </Card>
+</Columns>
+<Columns cols={3}>
+  <Card title="Yield Optimizers" icon="percent" color="#FF4205">
+    Move funds to maximize yields within risk limits
+  </Card>
+  <Card title="Liquidity Managers" icon="droplet" color="#FF4205">
+    Optimize LP positions based on market conditions
+  </Card>
+  <Card title="Collateral Managers" icon="shield" color="#FF4205">
+    Maintain healthy loan positions automatically
+  </Card>
+</Columns>
+<Columns cols={2}>
+  <Card title="Bridge Monitors" icon="link" color="#FF4205">
+    Automate cross-chain transfers at optimal times
+  </Card>
+  <Card title="Cross-Chain Arbitrage" icon="shuffle" color="#FF4205">
+    Capture profit opportunities across networks
+  </Card>
+</Columns>
+
+## What makes Vincent different?
+
+- **Decentralized Key Management:** Vincent leverages Lit Protocol's [Programmable Key Pairs](https://developer.litprotocol.com/user-wallets/pkps/overview) (PKPs) to securely manage agent identities without the possibility of ever exposing private keys.
+
+- **Verifiable, Fine-Grained Policies:** Users have full control over the policies they set and can revoke them at any time. Policies are fine-grained to specific operations and verifiable on-chain.
+
+- **Cross-Platform Automation:** With Vincent, agents can operate seamlessly across any blockchain or off-chain platform. Build agent-powered apps and abilities for DeFi, TradFi, E-Commerce, and more.
+
+- **Agent Marketplace:** Vincent will eventually serve as a marketplace for Vincent-powered apps and abilities, enabling them to be discovered and interacted with by end users.
+
+- **Open Source:** Fork, customize, and contribute to the Vincent codebase to shape the future of the agent-driven and user-controlled Web.
+
+## Learn More
+
+<Columns cols={3}>
+  <Card title="Apps" icon="cube" color="#FF4205" href="/concepts/apps/about">
+    Apps built on Vincent that provide specific delegation functionality
+  </Card>
+  <Card title="Abilities" icon="hammer" color="#FF4205" href="/concepts/abilities/about">
+    Individual capabilities that can be composed into larger workflows
+  </Card>
+  <Card title="Policies" icon="shield-check" color="#FF4205" href="/concepts/policies/about">
+    Fine-grained rules that control what abilities can do
+  </Card>
+</Columns>
+
+<Columns cols={2}>
+  <Card title="Wallets" icon="wallet" color="#FF4205" href="/concepts/wallets/about">
+    Secure wallet management for Vincent users
+  </Card>
+  <Card title="Security" icon="lock" color="#FF4205" href="/concepts/introduction/security">
+    Learn about Vincent's MPC-TSS and TEE security architecture
+  </Card>
+</Columns>
+
+
+---
+
+# Concept: Security
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/concepts/introduction/security.mdx
+
+---
+title: 'Security'
+---
+
+Vincent Wallets are managed by [Lit Protocol's](https://litprotocol.com) decentralized key management network. Secured by Multi-Party Computation with Threshold Signature Scheme (MPC-TSS) and Trusted Execution Environments (TEEs), Lit ensures that all key material remains non-custodial, confidential, and fully in your control.
+
+## Core Security Technologies
+
+<Columns cols={3}>
+  <Card title="MPC-TSS" icon="key" color="#FF4205">
+    Keys split across nodes, never exist in entirety
+  </Card>
+  <Card title="TEEs" icon="lock" color="#FF4205">
+    Hardware-isolated environments protect operations
+  </Card>
+  <Card title="Lit Actions" icon="code" color="#FF4205">
+    Immutable programs that enforce user policies
+  </Card>
+</Columns>
+
+### **Multi-Party Computation Threshold Signature Scheme (MPC-TSS)**
+- **Keys never exist in entirety:** Split across multiple nodes for security
+- **No single point of failure:** Distributed architecture prevents compromise
+- **Cryptographically secure:** Mathematical guarantees of key safety
+- **Hardware protected:** Sealed environments prevent extraction
+
+### **Trusted Execution Environments (TEEs)**
+- **Complete isolation:** Separated from host systems and operators
+- **Hardware encryption:** Built-in cryptographic protections
+- **Tamper resistant:** Physical and software attack prevention
+- **Zero exposure:** Keys never visible to anyone
+
+### **Permission Enforcement via Lit Actions**
+- **Enforce policies:** User-defined rules are cryptographically enforced
+- **Access any data source:** Connect to blockchains and off-chain APIs
+- **Remain verifiable:** All executions are cryptographically provable
+- **Work everywhere:** Blockchain agnostic design supports any platform
+
+## Learn More
+
+<Columns cols={2}>
+  <Card
+    title="Lit Security Overview"
+    icon="shield"
+    href="https://developer.litprotocol.com/security/introduction"
+    color="#FF4205"
+    cta="Read More"
+    arrow="true"
+  >
+    Comprehensive security architecture documentation
+  </Card>
+  <Card
+    title="Node Architecture"
+    icon="server"
+    href="https://developer.litprotocol.com/security/node-architecture"
+    color="#FF4205"
+    cta="View Docs"
+    arrow="true"
+  >
+    Technical details on Lit's node security design
+  </Card>
+</Columns>
+
+---
+
+# Concept: Apps
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/concepts/apps/about.mdx
+
+---
+title: 'Apps'
+---
+
+Vincent Apps enable trusted automation on behalf of users without compromising custody or control. Apps leverage Vincent's delegation framework to execute on-chain and off-chain actions within user-defined boundaries.
+
+## Key Features
+
+- **Policy-governed execution:** Every app must respect user-defined policies
+- **Non-custodial design:** Users retain full control of assets
+- **Cross-chain automation:** Works seamlessly across Solana, EVM chains, and Bitcoin
+- **Auditable actions:** All operations are transparent and verifiable on-chain
+- **Flexible integration:** Build autonomous agents or enhance existing web2/web3 apps
+- **No lock-in:** Open-source framework with portable implementations
+
+## Try it out
+
+<Columns cols={2}>
+  <Card
+    title="Demo Vincent App"
+    icon="play"
+    href="https://yield.heyvincent.ai"
+    color="#FF4205"
+    cta="View Demo"
+    arrow="true"
+  >
+    See a live yield optimization app built with Vincent
+  </Card>
+</Columns>
+
+## Get Started
+
+<Columns cols={2}>
+  <Card title="Creating an App" icon="rocket" href="/app/creating-an-app" color="#FF4205">
+    Build your first Vincent App
+  </Card>
+  <Card title="Explaining Apps" icon="cube" href="/app/explaining-apps" color="#FF4205">
+    Learn the fundamentals of Vincent App development
+  </Card>
+</Columns>
+
+## Capabilities
+
+<Columns cols={2}>
+  <Card title="Chain agnostic" icon="globe" color="#FF4205">
+    Support for Solana, 45+ EVM chains, and Bitcoin
+  </Card>
+  <Card title="No lock-in" icon="unlock" color="#FF4205">
+    Built on open standards. Fork and customize freely
+  </Card>
+</Columns>
+
+<Columns cols={2}>
+  <Card title="User-first security" icon="shield" color="#FF4205">
+    MPC and TEE protection with user-controlled policies
+  </Card>
+  <Card title="Full transparency" icon="eye" color="#FF4205">
+    Every action is auditable and verifiable on-chain
+  </Card>
+</Columns>
+
+<Columns cols={2}>
+  <Card title="Flexible policies" icon="sliders" color="#FF4205">
+    Spending limits, token allowlists, and custom rules
+  </Card>
+  <Card title="Composable abilities" icon="puzzle" color="#FF4205">
+    Mix and match pre-built abilities or create your own
+  </Card>
+</Columns>
+
+## Learn More
+
+<Columns cols={3}>
+  <Card title="Abilities" icon="hammer" href="/concepts/abilities/about" color="#FF4205">
+    Explore available abilities and actions
+  </Card>
+  <Card title="Policies" icon="shield-check" href="/concepts/policies/about" color="#FF4205">
+    Learn about policy enforcement
+  </Card>
+  <Card title="Security" icon="lock" href="/concepts/introduction/security" color="#FF4205">
+    Deep dive into security architecture
+  </Card>
+</Columns>
+
+---
+
+# Concept: Abilities
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/concepts/abilities/about.mdx
+
+---
+title: 'Abilities'
+---
+
+Vincent Abilities define exactly what apps can do with your wallet. These building blocks enable secure delegation of specific permissions—from DeFi automation to cross-chain transfers—giving you granular control over each app's capabilities.
+
+## Key Features
+
+- **Flexible Data Access:** Read and write on-chain and off-chain data across any network
+- **Policy-Driven Execution:** Execute abilities only when permitted by user policies
+- **Cryptographic Capabilities:** Sign transactions and encrypt data with conditional access
+- **Type-Safe Development:** Strongly-typed schemas ensure parameter validation and clear interfaces between Abilities and Policies
+
+## Get Started
+
+<Columns cols={2}>
+  <Card title="Quick Start" icon="rocket" href="/ability/quickstart" color="#FF4205">
+    Build your first ability
+  </Card>
+  <Card title="Explaining Abilities" icon="hammer" href="/ability/explaining-abilities" color="#FF4205">
+    Learn how to create custom abilities
+  </Card>
+</Columns>
+
+## Vincent Abilities Created by the Vincent Team
+
+| Ability                                             | Category      | Description                                                                                                                                 |
+| --------------------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Aave Gated Signer](/smart-account/abilities/aave)          | DeFi Protocol | Validate and sign EOA txs or ERC-4337 UserOperations for Aave protocol interactions, enabling secure delegated signing with comprehensive validation. |
+| [Aerodrome Swap](./aerodrome-swap)                  | DeFi Protocol | Execute token swaps on Aerodrome DEX on Base network with integrated approval management and optional gas sponsorship.                      |
+| [deBridge](./debridge)                              | Cross-Chain   | Bridge tokens across multiple blockchains using the deBridge protocol, streamlining cross-chain transfers.                                  |
+| [ERC20 Approval](./erc20-approval)                  | Utility       | Manage ERC20 token allowances, a foundational step for enabling DeFi operations like swaps, lending, and liquidity provision.               |
+| [ERC20 Transfer](./erc20-transfer)                  | Utility       | Transfers ERC20 tokens, a basic operation of fungible assets.                                                                               |
+| [EVM Transaction Signer](./evm-transaction-signer)  | Utility       | Sign arbitrary EVM transactions, allowing interaction with any smart contract—even those without a dedicated Vincent Ability.               |
+| [Morpho](./morpho)                                  | DeFi Protocol | Access Morpho lending vaults for yield generation, including depositing, withdrawing, and managing positions in Morpho's markets.           |
+| [Uniswap Swap](./uniswap-swap)                      | DeFi Protocol | Perform token swaps via Uniswap V3, enabling decentralized exchange functionality without manual user approvals.                            |
+
+<Info>
+**Looking for More Flexibility?**
+
+If you need to sign EVM transactions that aren't covered by a specific Vincent Ability, use the [EVM Transaction Signer](./evm-transaction-signer) to interact with any smart contract — even those without a dedicated Vincent Ability.
+</Info>
+
+## Learn More
+
+<Columns cols={2}>
+  <Card title="Policies" icon="shield-check" href="/concepts/policies/about" color="#FF4205">
+    Learn about policy enforcement
+  </Card>
+  <Card title="Apps" icon="cube" href="/concepts/apps/about" color="#FF4205">
+    Build apps that use Vincent abilities
+  </Card>
+</Columns>
+
+---
+
+# Concept: Policies
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/concepts/policies/about.mdx
+
+---
+title: 'Policies'
+---
+
+Vincent Policies are programmable guardrails built using [Lit Actions](https://developer.litprotocol.com/sdk/serverless-signing/overview) that determine whether Vincent Apps can execute specific abilities on behalf of users, from spending limits to access control, all cryptographically enforced.
+
+## Key Features
+
+- **Flexible Data Access:** Read and write on-chain and off-chain data to any blockchain or API
+- **Stateful Management:** Persist data across executions for spending limits and usage quotas
+- **Cryptographic Security:** Utilize Lit Protocol's encryption within secure TEE environments
+- **Type-Safe Development:** Strongly-typed Zod schemas ensure parameter validation and clear interfaces
+
+## Get Started
+
+<Columns cols={2}>
+  <Card title="Quick Start" icon="rocket" href="/ability/policy/quickstart" color="#FF4205">
+    Build your first policy
+  </Card>
+  <Card title="Explaining Policies" icon="hammer" href="/ability/policy/explaining-policies" color="#FF4205">
+    Learn how to create custom policies
+  </Card>
+</Columns>
+
+## Official Policies
+
+### Financial Controls
+
+<Columns cols={2}>
+  <Card title="Spending Limit" icon="dollar-sign" href="/ability/policy/official-policies/spending-limit" color="#FF4205">
+    Set daily USD spending limits for automated transactions
+  </Card>
+</Columns>
+
+### Access Management
+
+<Columns cols={2}>
+  <Card title="Contract Whitelist" icon="list" href="/ability/policy/official-policies/contract-whitelist" color="#FF4205">
+    Restrict interactions to pre-approved smart contracts only
+  </Card>
+</Columns>
+
+## Learn More
+
+<Columns cols={2}>
+  <Card title="Abilities" icon="hammer" href="/concepts/abilities/about" color="#FF4205">
+    Explore available abilities and actions
+  </Card>
+  <Card title="Apps" icon="cube" href="/concepts/apps/about" color="#FF4205">
+    Build apps that use Vincent abilities
+  </Card>
+</Columns>
+
+---
+
+# Concept: Wallets
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/concepts/wallets/about.mdx
+
+---
+title: 'Overview'
+---
+
+Vincent Wallets are non-custodial, cross-chain wallets powered by [Lit Protocol's](https://litprotocol.com) [Programmable Key Pairs (PKPs)](https://developer.litprotocol.com/user-wallets/pkps/overview) and secured by their decentralized key management network. They enable users to safely delegate transaction signing to Vincent Apps while maintaining full control over their assets through policy-governed delegation.
+
+## Key Features
+
+- **Non-Custodial Security:** Keys never exist in entirety, split across multiple nodes for security
+- **Cross-Chain Support:** Works seamlessly across Solana, EVM chains, and Bitcoin
+- **Policy-Governed Access:** Delegate signing permissions within user-defined boundaries
+- **MPC-TEE Protection:** Advanced cryptographic security through distributed key management
+
+## Get Started
+
+<Columns cols={2}>
+  <Card title="Create Wallet" icon="wallet" href="https://dashboard.heyvincent.ai/developer/dashboard" color="#FF4205">
+    Set up your Vincent Account in less than a minute
+  </Card>
+  <Card title="Security Model" icon="shield" href="/concepts/introduction/security" color="#FF4205">
+    Learn about Vincent's security architecture
+  </Card>
+</Columns>
+<Columns cols={3}>
+  <Card title="User Accounts" icon="user" href="/concepts/wallets/user-accounts" color="#FF4205">
+    Learn about user-controlled wallet management
+  </Card>
+  <Card title="Agent Wallets" icon="wallet" href="/concepts/wallets/agent-wallets" color="#FF4205">
+    Understand app-specific wallet delegation
+  </Card>
+  <Card title="Smart Accounts" icon="microchip" href="/smart-account/introduction/about" color="#FF4205">
+    Discover programmable accounts with delegated signing
+  </Card>
+</Columns>
+<Columns cols={1}>
+  <Card title="PKPs Overview" icon="key" href="https://developer.litprotocol.com/user-wallets/pkps/overview" color="#FF4205">
+    Explore the underlying Programmable Key Pair technology
+  </Card>
+</Columns>
+
+---
+
+# Concept: Agent Wallets
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/concepts/wallets/agent-wallets.mdx
+
+---
+title: 'Agent Wallets'
+---
+
+Agent Wallets handle all delegation for specific Vincent Apps. Each Agent Wallet has a one-to-one relationship with a Vincent App and maintains persistent identity even when permissions are revoked and re-granted.
+
+## Key Features
+
+- **One-to-One Relationship:** Each Agent Wallet is dedicated to a single Vincent App
+- **Persistent Identity:** Agent Wallets maintain the same identity even if permissions are revoked and re-granted
+- **Isolated Operations:** Each app operates through its own dedicated Agent Wallet
+- **Owned by User Account:** All Agent Wallets are owned and controlled by your User Account
+
+## How Agent Wallets Work
+
+1. **A new Agent Wallet is minted** when you first authorize a Vincent App, creating an isolated security boundary for that specific application.
+2. **The Agent Wallet signs delegation permissions**, specifying which abilities the app can exercise—including code execution and signing operations on the wallet's behalf.
+3. **The Agent Wallet records the authorization on-chain**, creating an immutable record of the permission grant and completing the delegation process.
+
+## Learn More
+
+<Columns cols={3}>
+  <Card title="User Accounts" icon="user" href="/concepts/wallets/user-accounts" color="#FF4205">
+    Learn about User Accounts that own Agent Wallets
+  </Card>
+  <Card title="Security Model" icon="shield" href="/concepts/introduction/security" color="#FF4205">
+    Understand Vincent's security architecture
+  </Card>
+  <Card title="Policies" icon="shield" href="/concepts/policies/about" color="#FF4205">
+    Learn how policies govern Agent Wallet operations
+  </Card>
+</Columns>
+
+---
+
+# Concept: User Accounts
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/concepts/wallets/user-accounts.mdx
+
+---
+title: 'User Accounts'
+---
+
+Vincent User Accounts serve as the master identity for all your Vincent Wallets. When you authenticate with Vincent using any method, you create a single User Account that owns and manages all your Agent Wallets.
+
+## Key Features
+
+- **Centralized Management:** Provide centralized control for distributed wallet infrastructure
+- **Multi-Auth Support:** Authenticate using existing web3 wallets, phone, email, or passkey
+- **Hierarchical Control:** User Account owns and manages multiple Agent Wallets
+- **Cross-Platform Access:** Access your wallets from any device or platform
+
+
+## Authentication Methods
+
+<Columns cols={2}>
+  <Card title="EOA Wallet" icon="wallet" color="#FF4205">
+    Connect existing Ethereum wallets for instant access
+  </Card>
+  <Card title="Phone" icon="phone" color="#FF4205">
+    SMS verification for quick mobile onboarding
+  </Card>
+</Columns>
+
+<Columns cols={2}>
+  <Card title="Email" icon="envelope" color="#FF4205">
+    Email verification for secure, passwordless login
+  </Card>
+  <Card title="Passkey" icon="key" color="#FF4205">
+    Modern WebAuthn for secure, passwordless login
+  </Card>
+</Columns>
+
+## Learn More
+
+<Columns cols={3}>
+  <Card title="Agent Wallets" icon="wallet" href="/concepts/wallets/agent-wallets" color="#FF4205">
+    Learn about app-specific wallet delegation
+  </Card>
+  <Card title="PKPs Overview" icon="key" href="https://developer.litprotocol.com/user-wallets/pkps/overview" color="#FF4205">
+    Learn about Programmable Key Pairs
+  </Card>
+  <Card title="Security Model" icon="shield" href="/concepts/introduction/security" color="#FF4205">
+    Understand Vincent's security architecture
+  </Card>
+</Columns>
+
+---
+
+# App: Explaining Apps
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/app/explaining-apps.mdx
+
+---
+title: Explaining Apps
+---
+
+Understanding how Vincent Apps work is essential for building secure, user-controlled automation. This guide explains the key components and their relationships.
+
+## Vincent Apps
+
+Vincent Apps enable automated execution of on-chain and off-chain actions on behalf of users while maintaining strict user control through programmable permissions.
+
+<ParamField path="appId" type="number">
+  Unique identifier for your Vincent App across all versions
+</ParamField>
+
+<ParamField path="version" type="number">
+  Immutable version number ensuring users know exactly what they've authorized
+</ParamField>
+
+ The core execution logic of Apps is composed of Vincent Abilities and Vincent Policies working together.
+
+### Vincent Abilities
+
+Modular, executable functions that define what your App can do. Each Ability is an `npm` package containing the logic for specific actions.
+
+<CardGroup cols={3}>
+  <Card title="On-Chain Actions" icon="ethereum">
+    Token transfers, swaps, staking, lending, and smart contract interactions
+  </Card>
+  <Card title="Off-Chain Actions" icon="globe">
+    API calls, database operations, notifications, and external service integrations
+  </Card>
+  <Card title="Learn More" icon="book" href="/concepts/abilities/about">
+    Deep dive into how Vincent Abilities work
+  </Card>
+</CardGroup>
+
+### Vincent Policies
+
+Programmable guardrails that users configure to control how Abilities execute. Each Policy is an `npm` package that defines specific constraints and boundaries.
+
+<CardGroup cols={3}>
+  <Card title="Financial Controls" icon="dollar-sign">
+    Spending limits, budget caps, and value restrictions
+  </Card>
+  <Card title="Operational Controls" icon="shield-check">
+    Token allowlists, time windows, and rate limiting
+  </Card>
+  <Card title="Learn More" icon="book" href="/concepts/policies/about">
+    Deep dive into how Vincent Policies work
+  </Card>
+</CardGroup>
+
+#### Version Immutability
+
+App versions are immutable once published to ensure trust and transparency. Users delegate to a specific version with a fixed set of Abilities and Policies that cannot be changed without their explicit consent.
+
+<Info>
+When you need to modify Abilities or Policies, you must create a new version. See [Updating Your App](/app/updating-apps) for details on versioning and what requires a new version.
+</Info>
+
+### App Delegatees
+
+Ethereum addresses authorized to execute Abilities on behalf of users. These addresses act as the operational layer of your App.
+
+<CardGroup cols={2}>
+  <Card title="EOA Delegatees" icon="key">
+    Externally owned accounts for manual or automated execution using private keys
+  </Card>
+  <Card title="Smart Contract Delegatees" icon="code">
+    Contract addresses for programmatic execution with on-chain logic
+  </Card>
+</CardGroup>
+
+<AccordionGroup>
+  <Accordion title="Security Best Practices" icon="shield-check">
+    <Steps>
+      <Step title="Secure Key Storage">
+        Use hardware security modules or secure key management services for production delegatee private keys
+      </Step>
+      <Step title="Regular Key Rotation">
+        Implement a key rotation schedule to minimize exposure from potential compromises
+      </Step>
+      <Step title="Environment Separation">
+        Use different delegatee addresses for development, testing, and production environments
+      </Step>
+      <Step title="Activity Monitoring">
+        Set up logging and alerts for all delegatee transactions and Ability executions
+      </Step>
+    </Steps>
+  </Accordion>
+</AccordionGroup>
+
+---
+
+# App: Starter Kit
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/app/app-starter-kit.mdx
+
+---
+title: App Starter Kit
+---
+
+Get started quickly with Vincent using our pre-configured App Starter Kit. This approach provides a complete example application with all the setup already done for you.
+
+## What is the App Starter Kit?
+
+The Vincent App Starter Kit is an opinionated template that includes a fully configured Vincent App with example abilities, policies, and testing setup. It's a complete reference implementation that demonstrates best practices for building with Vincent.
+
+<Card title="App Starter Kit" icon="github" href="https://github.com/LIT-Protocol/vincent-starter-app">
+  Clone the Vincent App Starter Kit repository for quick setup
+</Card>
+
+## Prerequisites
+
+<CardGroup cols={3}>
+  <Card title="Node.js" icon="node" href="https://nodejs.org/en/download">
+    Version 20.19.4 or higher
+  </Card>
+  <Card title="pnpm" icon="box" href="https://pnpm.io/installation">
+    Version 10.7.0 or higher
+  </Card>
+  <Card title="MongoDB" icon="database" href="https://www.mongodb.com/docs/manual/installation/">
+    Local MongoDB instance or Docker container
+  </Card>
+</CardGroup>
+
+## Video Tutorial
+
+Follow along with this comprehensive video tutorial to build your first Vincent App using the starter kit:
+
+<iframe
+  width="100%"
+  height="400"
+  src="https://www.youtube.com/embed/18UnAZysjEE"
+  title="Vincent App Quick Start"
+  frameborder="0"
+  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+  allowfullscreen
+></iframe>
+
+## What's Next?
+
+<CardGroup cols={2}>
+  <Card title="Publishing Guide" icon="cloud-arrow-up" href="/app/publishing-apps">
+    Publish your App to the Vincent Registry
+  </Card>
+  <Card title="User Authentication" icon="shield-check" href="/app/authenticating-users">
+    Learn how to authenticate users in your App
+  </Card>
+</CardGroup>
+
+## Prefer Manual Setup?
+
+If you'd like more control over the setup process or want to integrate Vincent into an existing project, check out our manual setup guide:
+
+<Card title="Creating an App" icon="code" href="/app/creating-an-app">
+  Follow the step-by-step manual setup guide
+</Card>
+
+
+---
+
+# App: Creating an App
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/app/creating-an-app.mdx
+
+---
+title: Creating an App
+---
+
+Set up your Vincent development environment and test your abilities locally by following this guide.
+
+## Step 1: Configure Environment Variables
+
+To start onboarding your application onto Vincent, add the following environment variables to your project's `.env` file:
+
+```bash
+# This wallet is expected to have Lit test tokens, and will be used to:
+# - Fund the App Manager to register the Vincent App
+# - Fund the App Delegatee to be able to execute Vincent Abilities
+# You can fund this wallet with test tokens using the faucet:
+# https://chronicle-yellowstone-faucet.getlit.dev/
+TEST_FUNDER_PRIVATE_KEY='<Funder Private Key Here>'
+
+# This wallet will own the Vincent App and will be in charge of:
+# - Creating new App Versions
+# - Adding Vincent Abilities to App Versions
+# - Adding Delegatees to the App
+TEST_APP_MANAGER_PRIVATE_KEY='<App Manager Private Key Here>'
+
+# This wallet will execute the Vincent Abilities for a specific
+# Vincent App on behalf of the Vincent User
+TEST_APP_DELEGATEE_PRIVATE_KEY='<Delegatee Private Key here>'
+
+# This wallet will own the Vincent Agent Wallet that Vincent Delegatees use to
+# execute Abilities on its behalf. It's responsible for permitting each App Version,
+# granting the App Delegatees to sign with the Agent Wallet within Abilities
+TEST_AGENT_WALLET_PKP_OWNER_PRIVATE_KEY='<Agent Wallet Owner Private Key here>'
+```
+
+<Warning>
+**Security Note:** These are test environment private keys. Never commit your `.env` file to version control. Add it to your `.gitignore` file.
+</Warning>
+
+## Step 2: Fund Your Wallets
+
+Go to the [Lit Protocol Faucet](https://chronicle-yellowstone-faucet.getlit.dev/) and claim some `tstLPX` tokens for the Ethereum wallet address that corresponds to the `TEST_FUNDER_PRIVATE_KEY`.
+
+The funder wallet will automatically fund the App Manager and Delegatee wallets to ensure they have enough tokens to cover the gas fees necessary to interact with the Vincent Contract.
+
+## Step 3: Install Required Packages
+
+Install the necessary Vincent packages for your project.
+
+**Replace `@lit-protocol/vincent-ability-evm-transaction-signer` with your chosen Vincent ability and policy packages:**
+
+<CodeGroup>
+```bash npm
+npm install -D tsx
+npm install @lit-protocol/vincent-ability-evm-transaction-signer @lit-protocol/vincent-app-sdk @lit-protocol/vincent-e2e-test-utils dotenv ethers@5
+```
+
+```bash yarn
+yarn add -D tsx
+yarn add @lit-protocol/vincent-ability-evm-transaction-signer @lit-protocol/vincent-app-sdk @lit-protocol/vincent-e2e-test-utils dotenv ethers@5
+```
+
+```bash pnpm
+pnpm add -D tsx
+pnpm add @lit-protocol/vincent-ability-evm-transaction-signer @lit-protocol/vincent-app-sdk @lit-protocol/vincent-e2e-test-utils dotenv ethers@5
+```
+</CodeGroup>
+
+### Choosing Abilities and Policies
+
+If you're unsure about what Vincent abilities and policies to use for your app, explore these resources:
+
+<CardGroup cols={2}>
+  <Card title="Official Abilities" icon="puzzle-piece" href="/ability/official-abilities">
+    Browse pre-built abilities for common use cases
+  </Card>
+  <Card title="Official Policies" icon="shield-check" href="/ability/policy/official-policies">
+    Browse pre-built policies for common ability restriction requirements
+  </Card>
+</CardGroup>
+
+<CardGroup cols={1}>
+  <Card title="Need to Create a Custom Ability?" icon="wrench" href="/ability/official-abilities">
+    Build your own ability using the Vincent Ability Starter Kit
+  </Card>
+</CardGroup>
+
+## Step 4: Create Your Test Script
+
+Create a file called `test-vincent-app.ts` in your project. This script will set up your Vincent development environment and test ability execution.
+
+<Warning>
+**Important:** The code below uses the EVM Transaction Signer ability as an example. You must replace the following to match your chosen ability and policies:
+
+1. **Ability import** - Replace `@lit-protocol/vincent-ability-evm-transaction-signer` with your ability package
+2. **PERMISSION_DATA object** - Update with your ability's IPFS CID and associated policies
+3. **Ability parameters** - Update the `precheck()` and `execute()` parameters to match your ability's requirements
+
+Look for `TODO` comments in the code to locate these sections.
+</Warning>
+
+```typescript
+import { config } from 'dotenv';
+import * as util from 'util';
+import {
+  setupVincentDevelopmentEnvironment,
+} from '@lit-protocol/vincent-e2e-test-utils';
+import {
+  getVincentAbilityClient,
+  disconnectVincentAbilityClients,
+} from '@lit-protocol/vincent-app-sdk/abilityClient';
+import { ethers } from 'ethers';
+
+// TODO: Import your bundled abilities here
+import {
+  bundledVincentAbility,
+} from '@lit-protocol/vincent-ability-evm-transaction-signer';
+
+// Load environment variables
+config();
+
+// Run setup and execution if this file is executed directly
+if (require.main === module) {
+  (async () => {
+    try {
+      console.log('🚀 Starting ability execution...\n');
+
+      // Setup Vincent development environment (handles funding internally)
+      console.log('🔧 Setting up Vincent development environment...');
+      // TODO: Add your bundled Vincent Abilities, Policies, and Policy values here
+      const PERMISSION_DATA = {
+        [bundledVincentAbility.ipfsCid]: {},
+      };
+
+      const { agentPkpInfo, wallets } = await setupVincentDevelopmentEnvironment({
+        permissionData: PERMISSION_DATA,
+      });
+
+      console.log('✅ Setup complete\n');
+
+      // Create ability client with your bundled ability
+      const abilityClient = getVincentAbilityClient({
+        bundledVincentAbility: bundledVincentAbility,
+        ethersSigner: wallets.appDelegatee,
+        debug: false
+      });
+
+      // Create and serialize a sample transaction (ERC20 transfer of USDC)
+      // Note: This transaction won't be submitted, so we use example values
+      console.log('📝 Creating transaction...');
+
+      const serializedTx = ethers.utils.serializeTransaction({
+        to: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913', // USDC on Base
+        value: '0x00',
+        data: new ethers.utils.Interface([
+          'function transfer(address to, uint256 amount) returns (bool)',
+        ]).encodeFunctionData('transfer', [
+          '0x4200000000000000000000000000000000000006', // Recipient (WETH contract as example)
+          '100000', // 0.1 USDC (6 decimals)
+        ]),
+        chainId: 8453, // Base mainnet
+        nonce: 0, // Example nonce
+        gasPrice: '0x3B9ACA00', // Example: 1 gwei
+        gasLimit: '0x186A0', // 100,000 gas
+      });
+
+      // TODO: Run the precheck according to your imported abilities
+      console.log('\n🔍 Running precheck...');
+      const precheckResult = await abilityClient.precheck(
+        {
+          serializedTransaction: serializedTx,
+        },
+        {
+          delegatorPkpEthAddress: agentPkpInfo.ethAddress,
+        },
+      );
+
+      console.log('Precheck result:', util.inspect(precheckResult, { depth: 10 }));
+
+      if (!precheckResult.success) {
+        console.error('❌ Precheck failed:');
+        if (precheckResult.runtimeError) {
+          console.error('  Runtime error:', precheckResult.runtimeError);
+        }
+        if (precheckResult.result) {
+          console.error('  Result:', util.inspect(precheckResult.result, { depth: 10 }));
+        }
+        return;
+      }
+
+      const { deserializedUnsignedTransaction } = precheckResult.result;
+      console.log('✅ Precheck passed - deserialized transaction:', deserializedUnsignedTransaction);
+
+      // TODO: Execute according to your imported abilities
+      console.log('\n⚡ Executing ability (signing transaction)...');
+      const executeResult = await abilityClient.execute(
+        {
+          serializedTransaction: serializedTx,
+        },
+        {
+          delegatorPkpEthAddress: agentPkpInfo.ethAddress,
+        },
+      );
+
+      console.log('Execution result:', util.inspect(executeResult, { depth: 10 }));
+
+      if (!executeResult.success) {
+        console.error('❌ Execution failed:');
+        if (executeResult.runtimeError) {
+          console.error('  Runtime error:', executeResult.runtimeError);
+        }
+        if (executeResult.result) {
+          console.error('  Result:', util.inspect(executeResult.result, { depth: 10 }));
+        }
+        return;
+      }
+
+      const { signedTransaction, deserializedSignedTransaction } = executeResult.result;
+      console.log('\n🎉 All ability executions completed successfully!');
+      console.log('\nSigned transaction:', signedTransaction);
+      console.log('Deserialized signed transaction:', deserializedSignedTransaction);
+    } catch (error) {
+      console.error('❌ Execution failed with error:', error);
+      throw error;
+    } finally {
+      console.log('\n🧹 Cleaning up...');
+      await disconnectVincentAbilityClients();
+    }
+  })();
+}
+```
+
+## Step 5: Run Your Test
+
+Execute your test script using `tsx`:
+
+<CodeGroup>
+```bash npm
+npx tsx test-vincent-app.ts
+```
+
+```bash yarn
+yarn tsx test-vincent-app.ts
+```
+
+```bash pnpm
+pnpm tsx test-vincent-app.ts
+```
+</CodeGroup>
+
+The output will show the setup progress, precheck results, and execution results. A successful run will end with:
+
+```
+🎉 All ability executions completed successfully!
+🧹 Cleaning up...
+```
+
+**Congratulations!** You've successfully set up and tested your Vincent App!
+
+## What's Next?
+
+<Card title="Migrating to Production" icon="rocket" href="/app/migrating-to-production">
+  Deploy your App to production environment
+</Card>
+
+## Want a Full Example Instead?
+
+If you'd prefer to explore a complete working application rather than integrating Vincent into your own project, check out our App Starter Kit:
+
+<Card title="App Starter Kit" icon="github" href="/app/app-starter-kit">
+  Explore a pre-configured template with video tutorial
+</Card>
+
+
+---
+
+# App: Authenticating Users
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/app/authenticating-users.mdx
+
+---
+title: Authenticating Users
+---
+
+The Vincent Web App Client enables secure user authentication and delegation management for executing Vincent Abilities on their behalf.
+
+Using the Web App Client, you can direct users to the Vincent Connect Page where:
+- New users can review the Abilities your App is requesting and configure Vincent Policies
+- Returning users can log in and confirm their identity and authorized App Version
+
+## Authentication Flow
+
+<Steps>
+  <Step title="Redirect to Connect Page">
+    Your App redirects users to the Vincent Connect Page
+  </Step>
+
+  <Step title="User Reviews and Configures">
+    Users review requested Abilities and configure Policies
+  </Step>
+
+  <Step title="Return with JWT">
+    Upon approval, users return to your App with a signed JWT
+  </Step>
+
+  <Step title="Verify and Store">
+    Your App verifies and stores the JWT for authenticated requests
+  </Step>
+</Steps>
+
+## Vincent JWT
+
+The JWT proves user authentication via their Vincent Wallet and grants your App permission to act on their behalf.
+
+### JWT Structure
+
+<ParamField path="header" type="object">
+  Standard JWT header containing algorithm and type information
+</ParamField>
+
+<ParamField path="signature" type="string">
+  Signature from User's Vincent Wallet proving the JWT was signed using their wallet
+</ParamField>
+
+<ParamField path="data" type="string">
+  The raw, unsigned payload string used during signing
+</ParamField>
+
+<Note>
+To access these claims, use [`decodeVincentJWTFromUri`](https://docs.heyvincent.ai/interfaces/vincent-app-sdk.webAuthClient.WebAuthClient.html#decodevincentjwtfromuri) in your frontend.
+</Note>
+
+### JWT Contains
+
+<ParamField path="JWT" type="object">
+  The Vincent JWT containing authentication and authorization details.
+  <Expandable title="properties">
+    <ParamField path="pkp" type="object" required>
+      User's Vincent Wallet containing ethAddress, publicKey, and tokenId
+    </ParamField>
+    <ParamField path="app" type="object" required>
+      Vincent App the JWT was issued for, including id and version fields
+    </ParamField>
+    <ParamField path="authentication" type="object" required>
+      Authentication method with type (email, phone, or passkey) and optional value
+    </ParamField>
+    <ParamField path="aud" type="string" required>
+      Valid audience (your domain/redirect URI)
+    </ParamField>
+    <ParamField path="exp" type="number" required>
+      Expiration timestamp (seconds since Unix epoch)
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Setting Up the Web App Client
+
+<ParamField path="getWebAuthClient" type="function">
+  Creates a Vincent Web App Client instance
+  <Expandable title="parameters">
+    <ParamField path="appId" type="string" required>
+      Your Vincent App ID from the dashboard
+    </ParamField>
+  </Expandable>
+  <Expandable title="returns">
+    <ParamField path="vincentAppClient" type="object">
+      The Vincent App Client instance with authentication methods
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+```javascript
+import { getWebAuthClient } from '@lit-protocol/vincent-app-sdk/webAuthClient';
+
+const vincentAppClient = getWebAuthClient({
+  appId: process.env.MY_VINCENT_APP_ID
+});
+```
+
+## Handling Authentication
+
+<ParamField path="vincentAppClient.uriContainsVincentJWT" type="method">
+  Checks if the current URL contains a Vincent JWT
+  <Expandable title="returns">
+    <ParamField path="hasJWT" type="boolean">
+      Returns true if URL contains a Vincent JWT, false otherwise
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="vincentAppClient.decodeVincentJWTFromUri" type="method">
+  Extracts and validates JWT from URL
+  <Expandable title="parameters">
+    <ParamField path="origin" type="string" required>
+      The origin URL to validate against (e.g., window.location.origin)
+    </ParamField>
+  </Expandable>
+  <Expandable title="returns">
+    <ParamField path="decodedJWT" type="object">
+      The decoded JWT object containing all JWT claims
+    </ParamField>
+    <ParamField path="jwtStr" type="string">
+      The raw JWT string for storage
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="vincentAppClient.removeVincentJWTFromURI" type="method">
+  Removes the Vincent JWT query parameter from the current URL
+</ParamField>
+
+<ParamField path="vincentAppClient.redirectToConnectPage" type="method">
+  Redirects user to Vincent Connect Page for authentication
+  <Expandable title="parameters">
+    <ParamField path="redirectUri" type="string" required>
+      The URI to redirect back to after authentication. Must be one of your configured Authorized Redirect URIs.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="isExpired" type="function">
+  Checks if a JWT has expired
+  <Expandable title="parameters">
+    <ParamField path="jwt" type="string" required>
+      The JWT string to check
+    </ParamField>
+  </Expandable>
+  <Expandable title="returns">
+    <ParamField path="expired" type="boolean">
+      Returns true if the JWT is expired, false otherwise
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+```javascript
+import { getWebAuthClient } from '@lit-protocol/vincent-app-sdk/webAuthClient';
+import { isExpired } from '@lit-protocol/vincent-app-sdk/jwt';
+
+const vincentAppClient = getWebAuthClient({
+  appId: process.env.MY_VINCENT_APP_ID
+});
+
+// Check for JWT in URL after Connect flow
+if (vincentAppClient.uriContainsVincentJWT()) {
+  const { decodedJWT, jwtStr } = vincentAppClient.decodeVincentJWTFromUri(
+    window.location.origin
+  );
+
+  // Store JWT
+  localStorage.setItem('VINCENT_AUTH_JWT', jwtStr);
+
+  // Clean URL
+  vincentAppClient.removeVincentJWTFromURI();
+} else {
+  // Check for existing JWT
+  const storedJwt = localStorage.getItem('VINCENT_AUTH_JWT');
+  const expired = storedJwt ? isExpired(storedJwt) : true;
+
+  if (!storedJwt || expired) {
+    // Redirect to Connect Page
+    vincentAppClient.redirectToConnectPage({
+      redirectUri: window.location.href
+    });
+  }
+}
+```
+
+<Warning>
+The `redirectUri` must be one of your configured Authorized Redirect URIs.
+</Warning>
+
+## Backend Verification
+
+Always verify JWTs submitted to your backend:
+
+<ParamField path="verify" type="function">
+  Verifies a Vincent JWT on your backend
+  <Expandable title="parameters">
+    <ParamField path="jwt" type="string" required>
+      The Vincent JWT string returned from the Connect flow
+    </ParamField>
+    <ParamField path="audience" type="string" required>
+      The redirect URI that received the JWT from the Vincent Connect Page
+    </ParamField>
+  </Expandable>
+  <Expandable title="returns">
+    <ParamField path="decodedJWT" type="object">
+      The decoded and verified JWT object if valid
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+```javascript
+import { verify } from '@lit-protocol/vincent-app-sdk/jwt';
+
+const vincentJwt = '...'; // JWT from frontend
+const jwtAudience = 'https://my-redirect-uri.com';
+
+try {
+  const decodedJWT = verify(vincentJwt, jwtAudience);
+  // JWT is valid and was created specifically for your App
+} catch (error) {
+  // JWT is invalid, expired, or mis-scoped
+}
+```
+
+<Warning>
+The verify method will throw an error if the JWT is invalid, expired, or mis-scoped.
+</Warning>
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="What happens when a JWT expires?" icon="clock">
+    When a JWT expires, you'll need to redirect the user back to the Vincent Connect Page using `redirectToConnectPage()`. Returning users will be able to quickly re-authenticate and get a new JWT without reconfiguring their Policies.
+  </Accordion>
+
+  <Accordion title="Can I use the same JWT across multiple domains?" icon="globe">
+    No, JWTs are scoped to specific redirect URIs for security. Each domain needs its own JWT obtained through the Vincent Connect flow with that domain as the redirect URI.
+  </Accordion>
+
+  <Accordion title="How long are JWTs valid?" icon="timer">
+    JWT expiration is set by the Vincent platform. Check the `exp` claim in the JWT to see when it expires (timestamp in seconds since Unix epoch).
+  </Accordion>
+
+  <Accordion title="Do I need to verify JWTs in my frontend?" icon="shield-check">
+    The `decodeVincentJWTFromUri` method automatically validates JWTs in your frontend. However, you MUST always verify JWTs on your backend using the `verify` function before processing authenticated requests.
+  </Accordion>
+
+  <Accordion title="What's the difference between new and returning users?" icon="users">
+    New users will see your App's requested Abilities and can configure Policies before granting permission. Returning users who have already authorized your App will simply confirm their identity and the App version they've authorized.
+  </Accordion>
+
+  <Accordion title="Can users revoke access to my App?" icon="user-minus">
+    Yes. If access is revoked, the user will need to repermit the app before they can generate a new JWT for it. Execution of Vincent Abilities on their behalf will also fail.
+  </Accordion>
+</AccordionGroup>
+
+---
+
+# App: Publishing Apps
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/app/publishing-apps.mdx
+
+---
+title: Publishing Apps
+---
+
+This section will cover the steps to publish a new Vincent App and make your app permissible to Vincent users.
+
+<Steps>
+  <Step title="Log into the Vincent Developer Dashboard">
+    Go to the [Vincent Developer Dashboard](https://dashboard.heyvincent.ai/developer/dashboard) and log in with your preferred authentication method.
+
+    <img
+      src="/images/app/publishing/image-1.png"
+      alt="Vincent Developer Dashboard login page"
+      className="rounded-lg"
+    />
+  </Step>
+
+  <Step title="Create a New Vincent App">
+    After logging in, click the **Create an app** button to access the [Create App Page](https://dashboard.heyvincent.ai/developer/create-app)
+
+    <img
+      src="/images/app/publishing/image-2.png"
+      alt="Create an app button in Vincent Dashboard"
+      className="rounded-lg"
+    />
+  </Step>
+
+  <Step title="Fill in the App Details">
+    <Tabs>
+      <Tab title="Required Values">
+        The following field requires a specific value:
+
+        <ParamField path="Delegatee Addresses" type="string" required>
+          This can be any EOA you have access to the private key of
+        </ParamField>
+      </Tab>
+
+      <Tab title="Test Values">
+        You can use test values for these fields:
+
+        <ParamField path="App Name" type="string" required>
+          The name of your Vincent App
+        </ParamField>
+
+        <ParamField path="Contact Email" type="string" required>
+          Email address for app-related communications
+        </ParamField>
+
+        <ParamField path="Description" type="string" required>
+          Brief description of what your app does
+        </ParamField>
+
+        <ParamField path="App User URL" type="string" required>
+          The URL where users will access your app
+        </ParamField>
+
+        <ParamField path="Redirect URIs" type="string" required>
+          OAuth redirect URIs for your app
+        </ParamField>
+      </Tab>
+    </Tabs>
+
+    Once you've filled in the required fields, click the **Create App** button to create your new Vincent App.
+
+    <Info>
+    If you misinput any of these, don't worry. These are editable after app creation as well.
+    </Info>
+
+    <img
+      src="/images/app/publishing/image-3.png"
+      alt="App details form"
+      className="rounded-lg"
+    />
+  </Step>
+
+  <Step title="Add Vincent Abilities">
+    After creating your Vincent App, you'll be directed to the Add Abilities page. Click the **Add Abilities to Version** button, and select your abilities to add them to your Vincent App.
+
+    You will then want to click the **Publish App Version** button that appears below the abilities.
+
+    <img
+      src="/images/app/publishing/image-4.png"
+      alt="Add Abilities to Version interface"
+      className="rounded-lg"
+    />
+  </Step>
+
+  <Step title="Publish the App Version">
+    Click the **Publish App Version** button to register the App Version as published in the Vincent Registry smart contract.
+
+    <img
+      src="/images/app/publishing/image-6.png"
+      alt="Publish App Version button"
+      className="rounded-lg"
+    />
+  </Step>
+
+  <Step title="Permit Your App">
+    On your app page, click the share button to view the Connect Page URL. Navigate to your app's Connect Page and grant permissions to your application.
+
+    <img
+      src="/images/app/publishing/image-7-1.png"
+      alt="Share button to get Connect Page URL"
+      className="rounded-lg"
+    />
+
+    <img
+      src="/images/app/publishing/image-7-2.png"
+      alt="Connect Page with app permissions"
+      className="rounded-lg"
+    />
+
+    <img
+      src="/images/app/publishing/image-7-3.png"
+      alt="Grant permissions interface"
+      className="rounded-lg"
+    />
+  </Step>
+</Steps>
+
+## Authenticating Users
+
+Now that your app is published and you've granted it permissions, you'll need to implement user authentication in your application. This allows your app to securely identify users and interact with their agent wallets on their behalf.
+
+<Card title="Authenticating Users" icon="lock" href="/app/authenticating-users">
+  Learn how to implement secure user authentication in your Vincent App
+</Card>
+
+<Success>
+**Congratulations!** Your Vincent App is now published and ready to execute abilities on behalf of your users!
+</Success>
+
+## Learn More
+
+<Columns cols={3}>
+  <Card title="Explaining Apps" icon="book" href="/app/explaining-apps" color="#FF4205">
+    Learn the fundamentals of Vincent App development
+  </Card>
+  <Card title="Updating Apps" icon="rotate" href="/app/updating-apps" color="#FF4205">
+    Learn how to update and version your Vincent Apps
+  </Card>
+  <Card title="Deprecating App Versions" icon="ban" href="/app/deprecating-app-versions" color="#FF4205">
+    Learn how to deprecate old versions of your Vincent Apps
+  </Card>
+</Columns>
+
+---
+
+# App: Updating Apps
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/app/updating-apps.mdx
+
+---
+title: Updating Apps
+---
+
+Vincent Apps use versioning to ensure user trust and security. When users delegate to your App, they delegate to a specific version with an immutable set of Abilities and Policies that cannot be changed without their explicit consent.
+
+## Version Changes
+
+<Tabs>
+  <Tab title="Requires New Version">
+    <ParamField path="abilities" type="array">
+      Adding, updating, or removing Vincent Abilities from your App
+    </ParamField>
+    <ParamField path="policies" type="array">
+      Modifying Vincent Policies for your App's Abilities
+    </ParamField>
+  </Tab>
+  <Tab title="Can Change Anytime">
+    <ParamField path="delegatees" type="array">
+      App Delegatees authorized for all versions
+    </ParamField>
+    <ParamField path="redirectUris" type="array">
+      Redirect URIs for the Vincent Connect page
+    </ParamField>
+    <ParamField path="deploymentStatus" type="string">
+      Deployment status (DEV, TEST, PROD)
+    </ParamField>
+    <ParamField path="appDetails" type="object">
+      App details including name, description, and logo
+    </ParamField>
+  </Tab>
+</Tabs>
+
+## Version Lifecycle
+
+<Steps>
+  <Step title="Create">
+    Initialize the version off-chain with your chosen Abilities and Policies. Changes are still possible at this stage.
+  </Step>
+
+  <Step title="Publish">
+    Register the version on-chain in the Vincent App Registry. Once published, the version becomes immutable and available for user delegation.
+  </Step>
+</Steps>
+
+<Warning>
+Published versions cannot be modified. To make changes, create and publish a new version.
+</Warning>
+
+## How to Create a New Version
+
+<Steps>
+    <Step title="Navigate to the Developer Dashboard">
+        Go to the [Vincent Developer Dashboard](https://dashboard.heyvincent.ai/developer/dashboard)
+    </Step>
+
+    <Step title="Access App Details">
+        Select the App Details menu item from the sidebar menu
+
+        <img
+          src="/images/app/updating/image-2.png"
+          alt="App Details menu in sidebar"
+          className="rounded-lg"
+        />
+    </Step>
+
+    <Step title="Create New Version">
+        Click `Create App Version`
+
+        <img
+          src="/images/app/updating/image-3.png"
+          alt="Create App Version button"
+          className="rounded-lg"
+        />
+    </Step>
+
+    <Step title="Describe Your Changes">
+        Provide a description of changes made to the application since your previous version
+
+        <img
+          src="/images/app/updating/image-4.png"
+          alt="Version changes description field"
+          className="rounded-lg"
+        />
+    </Step>
+
+    <Step title="Configure Abilities and Policies">
+        Similar to creating the first version, you'll be redirected to add Abilities to your app version and configure policies
+
+        <img
+          src="/images/app/updating/image-5.png"
+          alt="Configure Abilities and Policies interface"
+          className="rounded-lg"
+        />
+    </Step>
+
+    <Step title="Publish the App Version">
+        On the left sidebar, click **Apps**, then **App Versions**, and select your new version to navigate to the App Version management page. Click the **Publish App Version** button to register the App Version as published in the Vincent Registry smart contract
+
+        <img
+          src="/images/app/updating/image-6.png"
+          alt="Publish App Version button"
+          className="rounded-lg"
+        />
+    </Step>
+
+    <Step title="Set as Active Version">
+        For users to see the version update, update the App's active version through the `Edit App` page
+
+        <img
+          src="/images/app/updating/image-7.png"
+          alt="Set active version interface"
+          className="rounded-lg"
+        />
+
+        And done! Now new users will permit your new app version, and existing users will be notified when they go to authenticate.
+    </Step>
+</Steps>
+
+## FAQ
+
+<Accordion title="What happens when I disable an App Version?">
+  Disabling an App Version immediately prevents users on that version from using your App. They'll be prompted to upgrade to the latest enabled version. Your delegatees won't be able to execute Abilities for users who only authorized the disabled version. Disabled versions can be re-enabled at any time.
+</Accordion>
+
+<Accordion title="When are users notified about new versions?">
+  Users are only notified when you set a new version as the active App Version. They won't see notifications for versions you create or publish but don't activate. Upgrade prompts appear when a new active version is available (optional if current version is enabled) or when their version is disabled (mandatory).
+</Accordion>
+
+<Accordion title="Why is versioning important?">
+  Versioning is fundamental to Vincent's trust model. Every version is immutable once published, transparent in what it authorizes, and requires explicit opt-in from users for upgrades. This gives you control over your App's evolution without compromising user permissions.
+</Accordion>
+
+## Next Steps
+
+<Card title="Deprecating App Versions" icon="ban" href="/app/deprecating-app-versions" color="#FF4205">
+  Learn how to disable old versions and manage user upgrades
+</Card>
+
+---
+
+# App: Deprecating App Versions
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/app/deprecating-app-versions.mdx
+
+---
+title: Deprecating App Versions
+---
+
+After publishing new App Versions and updating the App's active Version, you may want to disable previous App Versions to encourage your Vincent App Users to upgrade to newer versions.
+
+## Enable/Disable App Versions
+
+<Steps>
+  <Step title="Navigate to Version Dashboard">
+    Click the version number menu item in the sidebar menu to access the specific App Version's dashboard.
+  </Step>
+
+  <Step title="Disable the Version">
+    Click the **Disable App Version** button to deactivate the selected version.
+  </Step>
+</Steps>
+
+<img height="200" src="/images/app/deprecating/image-2.png" alt="Disable App Version Button" />
+
+<Info>
+The **Disable App Version** button can be found on each App Version's dashboard page.
+</Info>
+
+### Effects of Disabling
+
+Clicking this button will:
+
+- Immediately disable the App Version in the Vincent App Registry
+- Prevent your Vincent App Delegatees from executing Vincent Abilities for any Users who have authorized only the disabled App Version
+- Next time they authenticate to your app, users will be prompted to upgrade to the latest enabled App Version to continue using your App
+
+Once an App Version is disabled, the button will change to **Enable App Version**. Clicking this will re-enable the App Version, allowing your Vincent App Users who are still on that version to use it again, and permitting your Vincent App Delegatees to execute Vincent Abilities for that version.
+
+## What Do Your Vincent App Users See When Changing App Versions?
+
+If you create a new App Version and don't publish it, or create one and publish it, your Vincent App Users will not be notified of the new version.
+
+<Note>
+Users are only notified of new versions when you set the new version as your Vincent App's currently active App Version.
+</Note>
+
+### User Experience with Version Changes
+
+<Tabs>
+  <Tab title="Both Versions Enabled">
+    When both the user's current version and the app's active version are enabled:
+
+    <img height="300" src="/images/app/deprecating/both-enabled.png" alt="Both Versions Enabled" />
+
+    **User experience:**
+    - They see a notification about the new version available
+    - They can choose to upgrade or continue using their current version
+    - No interruption to their workflow
+
+    <Info>
+    Users with enabled versions are not forced to upgrade and can continue using the version they've already permitted.
+    </Info>
+  </Tab>
+
+  <Tab title="Current Version Disabled">
+    When the user's current version is disabled but a new active version is available:
+
+    <img height="300" src="/images/app/deprecating/current-disabled.png" alt="Current Version Disabled" />
+
+    **User experience:**
+    - They receive a prompt to upgrade to the latest enabled version
+    - They must upgrade to continue using your App
+    - They cannot access the App until they complete the upgrade
+
+    <Warning>
+    Disabling a version immediately blocks access for all users on that version until they upgrade.
+    </Warning>
+  </Tab>
+
+  <Tab title="Both Versions Disabled">
+    When both the user's current version and the app's active version are disabled:
+
+    <img height="300" src="/images/app/deprecating/both-disabled.png" alt="Both Versions Disabled" />
+
+    **User experience:**
+    - They cannot access the App at all
+    - No enabled version is available for them to upgrade to
+    - You must re-enable at least one version for users to regain access
+
+    <Warning>
+    Ensure at least one version remains enabled to maintain user access to your App.
+    </Warning>
+  </Tab>
+</Tabs>
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="What happens if I disable the active App Version?" icon="triangle-exclamation">
+    If you disable the active App Version but have other enabled versions available:
+    - Users on other enabled versions continue working normally
+    - Users on the disabled version must upgrade to the latest enabled version
+    - New users will be directed to the latest enabled version
+  </Accordion>
+
+  <Accordion title="Can I re-enable a disabled version?" icon="rotate">
+    Yes! The **Enable App Version** button allows you to re-enable any disabled version, immediately restoring access for users on that version.
+  </Accordion>
+
+  <Accordion title="How are users notified about version changes?" icon="bell">
+    Users are notified the next time they sign into your App using Vincent after you've made version changes. There are no push notifications or emails sent automatically.
+  </Accordion>
+</AccordionGroup>
+
+---
+
+# App: Migrating to Production
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/app/migrating-to-production.mdx
+
+---
+title: Migrating to Production
+---
+
+Once you've completed development and testing, you're ready to make your Vincent App available to users.
+
+<Warning>
+**Prerequisites:** Complete the [Creating an App](/app/creating-an-app) guide before migrating to production.
+</Warning>
+
+## Publishing Your App
+
+During local development, your app exists only as code in your Vincent Contract. To make it available to users in the Vincent ecosystem, you need to publish it through the [Vincent App Dashboard](https://dashboard.heyvincent.ai).
+
+Publishing your app enables:
+
+- **User discovery** - Your app appears in the Vincent ecosystem where users can find it
+- **Permission management** - Users can grant your app access to interact with their agent wallets
+
+The dashboard registration process allows you to provide essential metadata like your app's logo, description, and connection URLs that users will see when discovering and permitting your app.
+
+## What's Next?
+
+<Card title="Publishing Guide" icon="cloud-arrow-up" href="/app/publishing-apps">
+  Learn how to publish your App through the Vincent App Dashboard
+</Card>
+
+
+---
+
+# Ability: Explaining Abilities
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/ability/explaining-abilities.mdx
+
+---
+title: How Vincent Abilities Work
+---
+
+Vincent Abilities are modular, executable functions that define what operations your App can perform on behalf of users. This guide explains their structure, lifecycle, and implementation details.
+
+## Ability Lifecycle
+
+Vincent Abilities execute in two phases to ensure reliability and security:
+
+<Steps>
+  <Step title="Precheck">
+    Runs locally to validate that execution will likely succeed. This also runs `precheck` on the Vincent Policies to ensure they are valid as well
+  </Step>
+
+  <Step title="Execute">
+    Runs in the Lit Action environment to perform the actual operation. Policies also run their `evaluate` function here
+  </Step>
+</Steps>
+
+<Note>
+Only if all policies return `allow` results will your Ability's function execute. After successful execution, the Ability can optionally call Policy commit functions to update state.
+</Note>
+
+## Defining Your Ability
+
+<ParamField path="packageName" type="string" required>
+  The npm package name of your Ability (e.g., `@your-org/ability-name`)
+</ParamField>
+
+<ParamField path="abilityDescription" type="string" required>
+  A clear description of what your Ability does
+</ParamField>
+
+<ParamField path="abilityParamsSchema" type="ZodSchema" required>
+  Zod schema defining the input parameters your Ability requires
+</ParamField>
+
+<ParamField path="supportedPolicies" type="SupportedPolicies" required>
+  Array of supported Vincent Policies, created with `supportedPoliciesForAbility()`
+</ParamField>
+
+<ParamField path="precheckSuccessSchema" type="ZodSchema">
+  Zod schema for successful precheck return values
+</ParamField>
+
+<ParamField path="precheckFailSchema" type="ZodSchema">
+  Zod schema for failed precheck return values
+</ParamField>
+
+<ParamField path="precheck" type="function" required>
+  Async function that validates execution will likely succeed
+  <Expandable title="function signature">
+    ```typescript
+    (params: { abilityParams }, context: AbilityContext) => Promise<PrecheckResult>
+    ```
+  </Expandable>
+</ParamField>
+
+<ParamField path="executeSuccessSchema" type="ZodSchema">
+  Zod schema for successful execution return values
+</ParamField>
+
+<ParamField path="executeFailSchema" type="ZodSchema">
+  Zod schema for failed execution return values
+</ParamField>
+
+<ParamField path="execute" type="function" required>
+  Async function that performs the actual Ability operation
+  <Expandable title="function signature">
+    ```typescript
+    (params: { abilityParams }, context: AbilityContext) => Promise<ExecuteResult>
+    ```
+  </Expandable>
+</ParamField>
+
+## Creating Vincent Abilities
+
+Vincent Abilities are created using `createVincentAbility` from the Vincent Ability SDK:
+
+```typescript
+import { createVincentAbility } from '@lit-protocol/vincent-ability-sdk';
+
+export const vincentAbility = createVincentAbility({
+  packageName: '@your-org/ability-name',
+  abilityDescription: 'What this ability does',
+
+  abilityParamsSchema,
+  supportedPolicies: supportedPoliciesForAbility([]),
+
+  precheckSuccessSchema,
+  precheckFailSchema,
+  precheck: async ({ abilityParams }, abilityContext) => {
+    // Validation logic
+  },
+
+  executeSuccessSchema,
+  executeFailSchema,
+  execute: async ({ abilityParams }, abilityContext) => {
+    // Main execution logic
+  },
+});
+```
+
+## Example Implementation
+
+<Accordion title="Full Token Transfer Ability">
+```typescript
+import {
+  createVincentAbility,
+  createVincentAbilityPolicy,
+  supportedPoliciesForAbility,
+} from '@lit-protocol/vincent-ability-sdk';
+import { bundledVincentPolicy } from '@lit-protocol/vincent-policy-spending-limit';
+import { z } from 'zod';
+
+const abilityParamsSchema = z.object({
+  tokenAddress: z.string(),
+  amountToSend: z.number(),
+  recipientAddress: z.string(),
+});
+
+const SpendingLimitPolicy = createVincentAbilityPolicy({
+  abilityParamsSchema,
+  bundledVincentPolicy,
+  abilityParameterMappings: {
+    tokenAddress: 'tokenAddress',
+    amountToSend: 'amount',
+  },
+});
+
+export const vincentAbility = createVincentAbility({
+  packageName: '@example/token-transfer-ability',
+  abilityDescription: 'Transfer ERC20 tokens to a recipient address',
+
+  abilityParamsSchema,
+  supportedPolicies: supportedPoliciesForAbility([SpendingLimitPolicy]),
+
+  precheckSuccessSchema: z.object({
+    tokenBalance: z.number(),
+    estimatedGas: z.number(),
+  }),
+  precheckFailSchema: z.object({
+    reason: z.string(),
+    currentBalance: z.number().optional(),
+    requiredAmount: z.number().optional(),
+  }),
+
+  executeSuccessSchema: z.object({
+    transferTransactionHash: z.string(),
+    spendTransactionHash: z.string().optional(),
+  }),
+  executeFailSchema: z.object({
+    error: z.string(),
+    errorCode: z.string().optional(),
+  }),
+
+  precheck: async ({ abilityParams }, abilityContext) => {
+    // Validation logic here
+  },
+
+  execute: async ({ abilityParams }, abilityContext) => {
+    // Execution logic here
+  },
+});
+```
+</Accordion>
+
+## Deep Dive Guides
+
+<CardGroup cols={2}>
+  <Card title="Parameter Schemas" icon="code" href="/ability/parameter-schemas">
+    Define and validate your Ability's input parameters
+  </Card>
+  <Card title="Supporting Policies" icon="shield" href="/ability/supporting-policies">
+    Integrate Vincent Policies with your Ability
+  </Card>
+  <Card title="Precheck Function" icon="check" href="/ability/precheck-function">
+    Implement validation logic before execution
+  </Card>
+  <Card title="Execute Function" icon="play" href="/ability/execute-function">
+    Write your main execution logic
+  </Card>
+</CardGroup>
+
+---
+
+# Ability: Execute Function
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/ability/execute-function.mdx
+
+---
+title: Execute Function
+---
+
+The execute function contains your Ability's core logic and runs in the Lit Action environment with access to signing capabilities. This is where the actual work happens.
+
+## Function Parameters
+
+The execute function receives two parameters:
+
+<ParamField path="params" type="object" required>
+  Object containing the ability parameters
+  <Expandable title="properties">
+    <ParamField path="abilityParams" type="object">
+      Parameters matching your `abilityParamsSchema` definition
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="abilityContext" type="object" required>
+  Context object provided by the SDK with helpers and metadata
+  <Expandable title="properties">
+    <ParamField path="succeed" type="function">
+      Helper function to return a success result matching your `executeSuccessSchema`
+    </ParamField>
+    <ParamField path="fail" type="function">
+      Helper function to return a failure result matching your `executeFailSchema`
+    </ParamField>
+    <ParamField path="delegation" type="object">
+      Contains `delegatorPkpInfo` with the Vincent Wallet address executing the ability
+    </ParamField>
+    <ParamField path="policiesContext" type="object">
+      Policy evaluation results and commit functions
+    </ParamField>
+    <ParamField path="appId" type="number">
+      ID of the Vincent App executing this Ability
+    </ParamField>
+    <ParamField path="appVersion" type="number">
+      Version of the Vincent App
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Response Schemas
+
+### Success Response
+
+<ParamField path="executeSuccessSchema" type="ZodSchema" required>
+  A Zod schema that defines the structure of successful execution results. Include details about the completed operation, such as transaction hashes, amounts transferred, or other relevant outcomes.
+</ParamField>
+
+### Failure Response
+
+<ParamField path="executeFailSchema" type="ZodSchema" required>
+  A Zod schema that defines the structure of failed execution results. Include error details to help the executor understand what went wrong, including error codes, reasons, and relevant context.
+</ParamField>
+
+<Tabs>
+  <Tab title="Success Schema">
+    ```typescript
+    import { createVincentAbility } from '@lit-protocol/vincent-ability-sdk';
+    import { z } from 'zod';
+
+    const vincentAbility = createVincentAbility({
+      // ... other ability definitions
+
+      executeSuccessSchema: z.object({
+        transactionHash: z.string(),
+        policyCommitResults: z.record(z.any()).optional(),
+        amountTransferred: z.number().optional(),
+        gasUsed: z.number().optional(),
+      }),
+    });
+    ```
+  </Tab>
+  <Tab title="Failure Schema">
+    ```typescript
+    import { createVincentAbility } from '@lit-protocol/vincent-ability-sdk';
+    import { z } from 'zod';
+
+    const vincentAbility = createVincentAbility({
+      // ... other ability definitions
+
+      executeFailSchema: z.object({
+        error: z.string(),
+        errorCode: z.string().optional(),
+        reason: z.string().optional(),
+        revertReason: z.string().optional(),
+      }),
+    });
+    ```
+  </Tab>
+</Tabs>
+
+<Note>
+If any unhandled error occurs during execution, the Vincent Ability SDK automatically returns a fail result with the error message.
+</Note>
+
+## Executing Vincent Policy Commit Functions
+
+After your ability's execute function successfully completes, the last step should be calling the commit functions for any supported Vincent Policies that have them. These commit functions allow policies to update their internal state based on what actions your ability performed.
+
+<Warning>
+Your ability's execute function should always call the commit functions for any supported Vincent Policies that have a commit function defined. Failing to do so could cause the Vincent Policies to operate incorrectly.
+</Warning>
+
+For our token transfer ability example, after successfully executing the transfer, we call the Vincent spending limit policy's commit function to update the amount spent:
+
+```typescript
+import { createVincentAbility } from '@lit-protocol/vincent-ability-sdk';
+import { createErc20TransferTransaction } from './my-ability-code';
+
+const vincentAbility = createVincentAbility({
+  // ... other ability definitions
+
+  execute: async ({ abilityParams }, abilityContext) => {
+    const { tokenAddress, amountToSend, recipientAddress } = abilityParams;
+    const { policiesContext } = abilityContext;
+
+    // previous code omitted for brevity
+    const transferTransaction = createErc20TransferTransaction(
+      tokenAddress,
+      recipientAddress,
+      amountToSend
+    );
+
+    const transferTransactionHash = await transferTransaction.send();
+
+    const spendingLimitPolicyContext =
+      policiesContext.allowedPolicies['@lit-protocol/vincent-policy-spending-limit'];
+
+    let spendTransactionHash: string | undefined;
+
+    if (spendingLimitPolicyContext !== undefined) {
+      const commitResult = await spendingLimitPolicyContext.commit({
+        spentAmount: amountToSend,
+        tokenAddress,
+      });
+
+      if (commitResult.allow) {
+        spendTransactionHash = commitResult.result.spendTransactionHash;
+      } else {
+        return abilityContext.fail({
+          error: commitResult.error ?? 'Unknown error occurred while committing spending limit policy',
+        });
+      }
+    }
+
+    return abilityContext.succeed({
+      transferTransactionHash,
+      spendTransactionHash,
+    });
+  },
+});
+```
+
+## Example Implementation
+
+<Accordion title="Full token transfer ability implementation">
+  ```typescript
+  import { createVincentAbility } from '@lit-protocol/vincent-ability-sdk';
+  import { z } from 'zod';
+
+  import { createErc20TransferTransaction } from './my-ability-code';
+
+  const vincentAbility = createVincentAbility({
+    // ... other ability definitions
+
+    executeSuccessSchema: z.object({
+      transferTransactionHash: z.string(),
+      spendTransactionHash: z.string().optional(),
+    }),
+
+    executeFailSchema: z.object({
+      error: z.string(),
+      errorCode: z.string().optional(),
+      revertReason: z.string().optional(),
+      transferTransaction: z.object({
+        to: z.string(),
+        value: z.string(),
+        data: z.string(),
+        gasLimit: z.string(),
+        gasPrice: z.string(),
+        maxFeePerGas: z.string(),
+        maxPriorityFeePerGas: z.string(),
+        nonce: z.number(),
+        chainId: z.number(),
+        type: z.number(),
+      }).optional(),
+    }),
+
+    execute: async ({ abilityParams }, abilityContext) => {
+      const { tokenAddress, amountToSend, recipientAddress } = abilityParams;
+
+      const transferTransaction = createErc20TransferTransaction(
+        tokenAddress,
+        recipientAddress,
+        amountToSend,
+      );
+
+      let estimatedGas;
+      try {
+        // Estimate gas to catch potential revert reasons early
+        estimatedGas = await transferTransaction.estimateGas();
+      } catch (error) {
+        // Handle gas estimation failures (transaction would revert)
+        if (error.code === 'UNPREDICTABLE_GAS_LIMIT') {
+          return abilityContext.fail({
+            error: 'Transaction reverted during gas estimation/transaction simulation',
+            errorCode: error.code,
+            revertReason: error.reason || 'Unknown revert reason',
+            transferTransaction,
+          });
+        }
+
+        // Let the Vincent Ability SDK handle the error
+        throw error;
+      }
+
+      const transferTransactionHash = await transferTransaction.send();
+
+      // Handle Policy commits
+      const spendingLimitPolicyContext =
+        abilityContext.policiesContext?.allowedPolicies?.['@lit-protocol/vincent-policy-spending-limit'];
+
+      let spendTransactionHash: string | undefined;
+
+      if (spendingLimitPolicyContext !== undefined) {
+        const commitResult = await spendingLimitPolicyContext.commit({
+          spentAmount: amountToSend,
+          tokenAddress,
+        });
+
+        if (commitResult.allow) {
+          spendTransactionHash = commitResult.result.spendTransactionHash;
+        } else {
+          return abilityContext.fail({
+            error: commitResult.error ?? 'Unknown error occurred while committing spending limit policy',
+          });
+        }
+      }
+
+      return abilityContext.succeed({
+        transferTransactionHash,
+        spendTransactionHash,
+      });
+    },
+  });
+  ```
+</Accordion>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Supporting Policies" icon="shield" href="/ability/supporting-policies">
+    Learn how to integrate Vincent Policies with your Ability
+  </Card>
+  <Card title="Publishing" icon="upload" href="/ability/publishing">
+    Deploy and publish your Ability to the Vincent Registry
+  </Card>
+</CardGroup>
+
+---
+
+# Ability: Parameter Schemas
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/ability/parameter-schemas.mdx
+
+---
+title: Defining Parameters
+---
+
+Define the structure and validation for your Ability's input parameters using Zod schemas.
+
+## Ability Input Parameters
+
+The `abilityParamsSchema` defines what parameters executors must provide to your Ability. These should include parameters required for your Ability's core functionality, and parameters required by any Vincent Policies your Ability supports.
+
+### Schema Parameters
+
+<ParamField path="abilityParamsSchema" type="ZodSchema" required>
+  A Zod schema object that defines the structure and validation rules for your Ability's input parameters. This schema is used to validate the `abilityParams` passed to both precheck and execute functions.
+</ParamField>
+
+```typescript
+import { createVincentAbility } from '@lit-protocol/vincent-ability-sdk';
+import { z } from 'zod';
+
+const abilityParamsSchema = z.object({
+  // Core ability parameters
+  tokenAddress: z.string().regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address"),
+  amountToSend: z.number().positive("Amount must be positive"),
+  recipientAddress: z.string().regex(/^0x[a-fA-F0-9]{40}$/, "Invalid recipient address"),
+
+  // Optional parameters
+  gasLimit: z.number().optional(),
+  customData: z.string().optional(),
+});
+
+const vincentAbility = createVincentAbility({
+  // ... other configuration
+  abilityParamsSchema,
+});
+```
+
+<Note>
+The `tokenAddress` and `amountToSend` parameters serve dual purposes: they're used by your Ability to execute the transfer, and they're also mapped to a spending limit Policy if supported. See [Supporting Policies](/ability/supporting-policies) for parameter mapping details.
+</Note>
+
+## Schema Validation Tips
+
+<CardGroup cols={2}>
+  <Card title="Use Descriptive Validation" icon="check-circle">
+    Add custom error messages to help developers understand requirements
+  </Card>
+  <Card title="Consider Policy Needs" icon="shield-check">
+    Include parameters required by your supported Policies
+  </Card>
+</CardGroup>
+
+### Common Validation Patterns
+
+<Tabs>
+  <Tab title="Ethereum Addresses">
+    ```typescript
+    address: z.string().regex(/^0x[a-fA-F0-9]{40}$/, "Invalid Ethereum address")
+    ```
+  </Tab>
+  <Tab title="Token Amounts">
+    ```typescript
+    amount: z.number().positive("Amount must be positive")
+    // or for big numbers
+    amount: z.string().regex(/^\d+$/, "Must be a valid number string")
+    ```
+  </Tab>
+</Tabs>
+
+
+## Best Practices
+
+1. **Keep It Simple** - Only require parameters you actually need for execution
+2. **Provide Clear Errors** - Use custom error messages that help developers fix issues
+3. **Consider Future Needs** - Make optional parameters for features you might add later
+4. **Document Complex Logic** - Use comments to explain conditional validation rules
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Supporting Policies" icon="shield" href="/ability/supporting-policies">
+    Learn how to integrate Policies with your parameters
+  </Card>
+  <Card title="Precheck Function" icon="check" href="/ability/precheck-function">
+    Use your parameters in validation logic
+  </Card>
+</CardGroup>
+
+---
+
+# Ability: Official Abilities Overview
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/ability/official-abilities/overview.mdx
+
+---
+category: Developers
+title: Official Abilities
+---
+
+## Vincent Abilities Created by the Vincent Team
+
+
+| Ability                                             | Category      | Description                                                                                                                                 |
+| --------------------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| [Aave Gated Signer](/smart-account/abilities/aave)          | DeFi Protocol | Validate and sign EOA txs or ERC-4337 UserOperations for Aave protocol interactions, enabling secure delegated signing with comprehensive validation. |
+| [Aerodrome Swap](./aerodrome-swap)                  | DeFi Protocol | Execute token swaps on Aerodrome DEX on Base network with integrated approval management and optional gas sponsorship.                      |
+| [deBridge](./debridge)                              | Cross-Chain   | Bridge tokens across multiple blockchains using the deBridge protocol, streamlining cross-chain transfers.                                  |
+| [ERC20 Approval](./erc20-approval)                  | Utility       | Manage ERC20 token allowances, a foundational step for enabling DeFi operations like swaps, lending, and liquidity provision.               |
+| [ERC20 Transfer](./erc20-transfer)                  | Utility       | Transfers ERC20 tokens, a basic operation of fungible assets.                                                                               |
+| [EVM Transaction Signer](./evm-transaction-signer)  | Utility       | Sign arbitrary EVM transactions, allowing interaction with any smart contract—even those without a dedicated Vincent Ability.               |
+| [Morpho](./morpho)                                  | DeFi Protocol | Access Morpho lending vaults for yield generation, including depositing, withdrawing, and managing positions in Morpho's markets.           |
+| [Uniswap Swap](./uniswap-swap)                      | DeFi Protocol | Perform token swaps via Uniswap V3, enabling decentralized exchange functionality without manual user approvals.                            |
+
+<Info>
+**Looking for More Flexibility?**
+
+If you need to sign EVM transactions that aren't covered by a specific Vincent Ability, use the [EVM Transaction Signer](./evm-transaction-signer) to interact with any smart contract — even those without a dedicated Vincent Ability.
+</Info>
+
+
+---
+
+# Policy: Explaining Policies
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/ability/policy/explaining-policies.mdx
+
+---
+title: How Vincent Policies Work
+---
+
+Vincent Policies are programmable guardrails built using Lit Actions that determine whether Vincent Apps can execute specific Abilities on behalf of users. They ensure autonomous agents operate strictly within user-defined boundaries.
+
+## Policy Lifecycle
+
+Vincent Policies execute in two phases during Ability execution:
+
+<Steps>
+  <Step title="Precheck">
+    Runs locally to validate that execution will likely succeed. Provides best-effort validation before network resources are used
+  </Step>
+
+  <Step title="Evaluate">
+    Runs in the Lit Action environment with full blockchain access to make the final allow/deny decision
+  </Step>
+</Steps>
+
+<Note>
+Only if all policies return `allow` results will the Ability's execute function proceed. After successful execution, the Ability may call the Policy's commit function to update state.
+</Note>
+
+## Defining Your Policy
+
+<ParamField path="packageName" type="string" required>
+  The npm package name of your Policy (e.g., `@your-org/policy-name`)
+</ParamField>
+
+<ParamField path="abilityParamsSchema" type="ZodSchema" required>
+  Zod schema defining what parameters Abilities must provide to your Policy
+</ParamField>
+
+<ParamField path="userParamsSchema" type="ZodSchema" required>
+  Zod schema for user-configurable boundaries stored securely on-chain
+</ParamField>
+
+<ParamField path="precheckAllowResultSchema" type="ZodSchema">
+  Zod schema for successful precheck return values
+</ParamField>
+
+<ParamField path="precheckDenyResultSchema" type="ZodSchema">
+  Zod schema for denied precheck return values
+</ParamField>
+
+<ParamField path="precheck" type="function" required>
+  Async function providing fast, local validation before using network resources
+  <Expandable title="function signature">
+    ```typescript
+    (params: { abilityParams, userParams }, context: PolicyContext) => Promise<PrecheckResult>
+    ```
+  </Expandable>
+</ParamField>
+
+<ParamField path="evalAllowResultSchema" type="ZodSchema">
+  Zod schema for successful evaluation return values
+</ParamField>
+
+<ParamField path="evalDenyResultSchema" type="ZodSchema">
+  Zod schema for denied evaluation return values
+</ParamField>
+
+<ParamField path="evaluate" type="function" required>
+  Async function with full blockchain access making final allow/deny decision
+  <Expandable title="function signature">
+    ```typescript
+    (params: { abilityParams, userParams }, context: PolicyContext) => Promise<EvaluateResult>
+    ```
+  </Expandable>
+</ParamField>
+
+<ParamField path="commitParamsSchema" type="ZodSchema">
+  Zod schema for parameters passed to commit function
+</ParamField>
+
+<ParamField path="commitAllowResultSchema" type="ZodSchema">
+  Zod schema for successful commit return values
+</ParamField>
+
+<ParamField path="commitDenyResultSchema" type="ZodSchema">
+  Zod schema for failed commit return values
+</ParamField>
+
+<ParamField path="commit" type="function">
+  Optional async function to update policy state after successful Ability execution
+  <Expandable title="function signature">
+    ```typescript
+    (params: CommitParams, context: PolicyContext) => Promise<CommitResult>
+    ```
+  </Expandable>
+</ParamField>
+
+## Creating Vincent Policies
+
+Vincent Policies are created using `createVincentPolicy` from the Vincent Ability SDK:
+
+```typescript
+import { createVincentPolicy } from '@lit-protocol/vincent-ability-sdk';
+
+export const vincentPolicy = createVincentPolicy({
+  packageName: '@your-org/policy-name',
+
+  abilityParamsSchema,
+  userParamsSchema,
+
+  precheckAllowResultSchema,
+  precheckDenyResultSchema,
+  precheck: async ({ abilityParams, userParams }, policyContext) => {
+    // Local validation logic
+  },
+
+  evalAllowResultSchema,
+  evalDenyResultSchema,
+  evaluate: async ({ abilityParams, userParams }, policyContext) => {
+    // Final validation with blockchain access
+  },
+
+  commitParamsSchema,
+  commitAllowResultSchema,
+  commitDenyResultSchema,
+  commit: async (params, policyContext) => {
+    // Update policy state after successful execution
+  },
+});
+```
+
+## Example Implementation
+
+<Accordion title="Full Spending Limit Policy">
+```typescript
+import { createVincentPolicy } from '@lit-protocol/vincent-ability-sdk';
+import { z } from 'zod';
+
+const vincentPolicy = createVincentPolicy({
+  packageName: '@example/spending-limit-policy',
+
+  abilityParamsSchema: z.object({
+    tokenAddress: z.string(),
+    amount: z.number(),
+  }),
+
+  userParamsSchema: z.object({
+    dailySpendingLimit: z.number(),
+    allowedTokens: z.array(z.string()).optional(),
+  }),
+
+  precheckAllowResultSchema: z.object({
+    maxDailySpendingLimit: z.number(),
+    currentDailySpending: z.number(),
+    allowedTokens: z.array(z.string()),
+  }),
+
+  precheckDenyResultSchema: z.object({
+    reason: z.string(),
+    maxDailySpendingLimit: z.number(),
+    currentDailySpending: z.number(),
+    allowedTokens: z.array(z.string()),
+  }),
+
+  precheck: async ({ abilityParams, userParams }, policyContext) => {
+    const { amount, tokenAddress } = abilityParams;
+    const { dailySpendingLimit, allowedTokens } = userParams;
+
+    const isTokenAllowed = allowedTokens?.includes(tokenAddress) ?? true;
+    const { isSpendingLimitExceeded, currentDailySpending } = await checkSpendingLimit(
+      tokenAddress,
+      amount,
+      dailySpendingLimit,
+    );
+
+    if (!isTokenAllowed) {
+      return policyContext.deny({
+        reason: 'Token not allowed',
+        maxDailySpendingLimit: dailySpendingLimit,
+        currentDailySpending,
+        allowedTokens: allowedTokens || [],
+      });
+    }
+
+    if (isSpendingLimitExceeded) {
+      return policyContext.deny({
+        reason: 'Spending limit exceeded',
+        maxDailySpendingLimit: dailySpendingLimit,
+        currentDailySpending,
+        allowedTokens: allowedTokens || [],
+      });
+    }
+
+    return policyContext.allow({
+      maxDailySpendingLimit: dailySpendingLimit,
+      currentDailySpending,
+      allowedTokens: allowedTokens || [],
+    });
+  },
+
+  evalAllowResultSchema: z.object({
+    maxDailySpendingLimit: z.number(),
+    currentDailySpending: z.number(),
+    allowedTokens: z.array(z.string()),
+  }),
+
+  evalDenyResultSchema: z.object({
+    reason: z.string(),
+    maxDailySpendingLimit: z.number(),
+    currentDailySpending: z.number(),
+    allowedTokens: z.array(z.string()),
+  }),
+
+  evaluate: async ({ abilityParams, userParams }, policyContext) => {
+    // Similar to precheck but with blockchain access
+    const { amount, tokenAddress } = abilityParams;
+    const { dailySpendingLimit, allowedTokens } = userParams;
+
+    // Can access on-chain data here
+    const { isSpendingLimitExceeded, currentDailySpending } = await checkOnChainSpendingLimit(
+      policyContext.delegation.delegatorPkpInfo.ethAddress,
+      tokenAddress,
+      amount,
+      dailySpendingLimit,
+    );
+
+    if (isSpendingLimitExceeded) {
+      return policyContext.deny({
+        reason: 'Spending limit exceeded',
+        maxDailySpendingLimit: dailySpendingLimit,
+        currentDailySpending,
+        allowedTokens: allowedTokens || [],
+      });
+    }
+
+    return policyContext.allow({
+      maxDailySpendingLimit: dailySpendingLimit,
+      currentDailySpending,
+      allowedTokens: allowedTokens || [],
+    });
+  },
+
+  commitParamsSchema: z.object({
+    spentAmount: z.number(),
+    tokenAddress: z.string(),
+  }),
+
+  commitAllowResultSchema: z.object({
+    updatedDailySpending: z.number(),
+    remainingDailyLimit: z.number(),
+  }),
+
+  commitDenyResultSchema: z.object({
+    reason: z.string(),
+    vincentAppId: z.number(),
+    spenderAddress: z.string(),
+    spentAmount: z.number(),
+    spentTokenAddress: z.string(),
+  }),
+
+  commit: async (params, policyContext) => {
+    const { spentAmount, tokenAddress } = params;
+
+    try {
+      const { updatedDailySpending, remainingDailyLimit } = await updateSpentAmount({
+        vincentAppId: policyContext.appId,
+        spenderAddress: policyContext.delegation.delegatorPkpInfo.ethAddress,
+        spentAmount,
+        spentTokenAddress: tokenAddress,
+      });
+
+      return policyContext.allow({
+        updatedDailySpending,
+        remainingDailyLimit,
+      });
+    } catch (error) {
+      return policyContext.deny({
+        reason: 'Failed to update spending limit',
+        vincentAppId: policyContext.appId,
+        spenderAddress: policyContext.delegation.delegatorPkpInfo.ethAddress,
+        spentAmount,
+        spentTokenAddress: tokenAddress,
+      });
+    }
+  },
+});
+```
+</Accordion>
+
+## Deep Dive Guides
+
+<CardGroup cols={2}>
+  <Card title="Parameter Schemas" icon="code" href="/ability/policy/parameter-schemas">
+    Define parameters from Abilities and user configuration
+  </Card>
+  <Card title="Precheck Function" icon="check" href="/ability/policy/precheck-function">
+    Implement fast local validation logic
+  </Card>
+  <Card title="Evaluate Function" icon="magnifying-glass" href="/ability/policy/evaluate-function">
+    Write blockchain validation with full access
+  </Card>
+  <Card title="Commit Function" icon="database" href="/ability/policy/commit-function">
+    Update state after successful execution
+  </Card>
+</CardGroup>
+
+---
+
+# Policy: Evaluate Function
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/ability/policy/evaluate-function.mdx
+
+---
+title: Policy Evaluate Function
+---
+
+The evaluate function provides final validation with full blockchain access in the Lit Action environment. This is where your Policy makes the definitive allow/deny decision.
+
+## Function Parameters
+
+The evaluate function receives two parameters:
+
+<ParamField path="params" type="object" required>
+  Object containing the ability and user parameters
+  <Expandable title="properties">
+    <ParamField path="abilityParams" type="object">
+      Parameters matching your `abilityParamsSchema` definition
+    </ParamField>
+    <ParamField path="userParams" type="object">
+      Parameters matching your `userParamsSchema` definition
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField path="policyContext" type="object" required>
+  Context object provided by the SDK with helpers and metadata
+  <Expandable title="properties">
+    <ParamField path="abilityIpfsCid" type="string">
+      The IPFS CID of the Vincent Ability that is being executed
+    </ParamField>
+    <ParamField path="appId" type="number">
+      The ID of the Vincent App the Vincent Ability is being executed for
+    </ParamField>
+    <ParamField path="appVersion" type="number">
+      The version of the Vincent App the Vincent Ability is being executed for
+    </ParamField>
+    <ParamField path="delegation" type="object">
+      Information about the execution delegation
+      <Expandable title="properties">
+        <ParamField path="delegateeAddress" type="string">
+          The Ethereum address of the Vincent Ability executor
+        </ParamField>
+        <ParamField path="delegatorPkpInfo" type="object">
+          User's Vincent Wallet information
+          <Expandable title="properties">
+            <ParamField path="tokenId" type="string">
+              The token ID of the Vincent App User's Vincent Wallet
+            </ParamField>
+            <ParamField path="ethAddress" type="string">
+              The Ethereum address of the App User's Vincent Wallet
+            </ParamField>
+            <ParamField path="publicKey" type="string">
+              The public key of the App User's Vincent Wallet
+            </ParamField>
+          </Expandable>
+        </ParamField>
+      </Expandable>
+    </ParamField>
+    <ParamField path="allow" type="function">
+      Helper method for returning an allow result from your policy's evaluate function
+    </ParamField>
+    <ParamField path="deny" type="function">
+      Helper method for returning a deny result from your policy's evaluate function
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Response Schemas
+
+### Allow Response
+
+<ParamField path="evalAllowResultSchema" type="ZodSchema" required>
+  A Zod schema that defines the structure of successful evaluation results. Include details about why the evaluation passed, such as current state and validation context.
+</ParamField>
+
+### Deny Response
+
+<ParamField path="evalDenyResultSchema" type="ZodSchema" required>
+  A Zod schema that defines the structure of failed evaluation results. Include details about why the evaluation failed, such as exceeded limits or validation errors.
+</ParamField>
+
+<Tabs>
+  <Tab title="Allow Schema">
+    ```typescript
+    import { createVincentPolicy } from '@lit-protocol/vincent-ability-sdk';
+    import { z } from 'zod';
+
+    const vincentPolicy = createVincentPolicy({
+      // ... other policy definitions
+
+      evalAllowResultSchema: z.object({
+        maxDailySpendingLimit: z.number(),
+        currentDailySpending: z.number(),
+        allowedTokens: z.array(z.string()),
+      }),
+    });
+    ```
+  </Tab>
+  <Tab title="Deny Schema">
+    ```typescript
+    import { createVincentPolicy } from '@lit-protocol/vincent-ability-sdk';
+    import { z } from 'zod';
+
+    const vincentPolicy = createVincentPolicy({
+      // ... other policy definitions
+
+      evalDenyResultSchema: z.object({
+        reason: z.string(),
+        maxDailySpendingLimit: z.number(),
+        currentDailySpending: z.number(),
+        allowedTokens: z.array(z.string()),
+      }),
+    });
+    ```
+  </Tab>
+</Tabs>
+
+<Note>
+If any unhandled error occurs during evaluation, the Vincent Ability SDK automatically returns a deny result with the error message.
+</Note>
+
+## Example Implementation
+
+```typescript
+import { createVincentPolicy } from '@lit-protocol/vincent-ability-sdk';
+import { z } from 'zod';
+
+const vincentPolicy = createVincentPolicy({
+  // ... other policy definitions
+
+  evalAllowResultSchema: z.object({
+    maxDailySpendingLimit: z.number(),
+    currentDailySpending: z.number(),
+    allowedTokens: z.array(z.string()),
+  }),
+
+  evalDenyResultSchema: z.object({
+    reason: z.string(),
+    maxDailySpendingLimit: z.number(),
+    currentDailySpending: z.number(),
+    allowedTokens: z.array(z.string()),
+  }),
+
+  evaluate: async ({ abilityParams, userParams }, policyContext) => {
+    const { amount, tokenAddress } = abilityParams;
+    const { dailySpendingLimit, allowedTokens } = userParams;
+
+    const isTokenAllowed = allowedTokens.includes(tokenAddress);
+    const { isSpendingLimitExceeded, currentDailySpending } = await checkSpendingLimit(
+      tokenAddress,
+      amount,
+      dailySpendingLimit,
+    );
+
+    if (!isTokenAllowed) {
+      return policyContext.deny({
+        reason: 'Token not allowed',
+        maxDailySpendingLimit: dailySpendingLimit,
+        currentDailySpending,
+        allowedTokens: allowedTokens,
+      });
+    }
+
+    if (isSpendingLimitExceeded) {
+      return policyContext.deny({
+        reason: 'Spending limit exceeded',
+        maxDailySpendingLimit: dailySpendingLimit,
+        currentDailySpending,
+        allowedTokens: allowedTokens,
+      });
+    }
+
+    return policyContext.allow({
+      maxDailySpendingLimit: dailySpendingLimit,
+      currentDailySpending,
+      allowedTokens: allowedTokens,
+    });
+  },
+});
+```
+
+## Best Practices
+
+1. **Use Fresh Data** - Query current state rather than relying on cached values
+2. **Consistent with Precheck** - Apply the same validation logic as your precheck function
+3. **Handle Errors Gracefully** - Provide clear error messages for debugging
+4. **Return Context** - Include current state information in allow/deny responses
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Commit Function" icon="database" href="/ability/policy/commit-function">
+    Update policy state after successful execution
+  </Card>
+  <Card title="Publishing Policies" icon="rocket" href="/ability/policy/publishing">
+    Publish your policy for use in Vincent Apps
+  </Card>
+</CardGroup>
+
+---
+
+# Policy: Commit Function
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/ability/policy/commit-function.mdx
+
+---
+title: Policy Commit Function
+---
+
+The commit function updates your Policy's state after successful Ability execution. This is crucial for maintaining accurate tracking of limits, counters, and other stateful information.
+
+<Warning>
+If your Policy is stateful (tracks spending, counts executions, etc.), you MUST implement a commit function. Without it, your Policy will make incorrect decisions in future executions.
+</Warning>
+
+## Function Parameters
+
+The commit function receives two parameters:
+
+<ParamField path="params" type="object" required>
+  Object adhering to the `commitParamsSchema` you have defined for your policy. This should include the specific parameters that your policy needs to update the state your policy depends on for its validation checks.
+</ParamField>
+
+<Note>
+Notice that unlike the precheck and evaluate functions, the commit function does not receive the `abilityParams` and `userParams` arguments. If you need access to any of those variables, make sure to include them in the `commitParamsSchema` you have defined for your policy.
+</Note>
+
+<ParamField path="policyContext" type="object" required>
+  Context object provided by the SDK with helpers and metadata
+  <Expandable title="properties">
+    <ParamField path="abilityIpfsCid" type="string">
+      The IPFS CID of the Vincent Ability that was executed
+    </ParamField>
+    <ParamField path="appId" type="number">
+      The ID of the Vincent App the Vincent Ability was executed for
+    </ParamField>
+    <ParamField path="appVersion" type="number">
+      The version of the Vincent App the Vincent Ability was executed for
+    </ParamField>
+    <ParamField path="delegation" type="object">
+      Information about the execution delegation
+      <Expandable title="properties">
+        <ParamField path="delegateeAddress" type="string">
+          The Ethereum address of the Vincent Ability executor
+        </ParamField>
+        <ParamField path="delegatorPkpInfo" type="object">
+          User's Vincent Wallet information
+          <Expandable title="properties">
+            <ParamField path="tokenId" type="string">
+              The token ID of the Vincent App User's Vincent Wallet
+            </ParamField>
+            <ParamField path="ethAddress" type="string">
+              The Ethereum address of the App User's Vincent Wallet
+            </ParamField>
+            <ParamField path="publicKey" type="string">
+              The public key of the App User's Vincent Wallet
+            </ParamField>
+          </Expandable>
+        </ParamField>
+      </Expandable>
+    </ParamField>
+    <ParamField path="allow" type="function">
+      Helper method for returning an allow result from your policy's commit function
+    </ParamField>
+    <ParamField path="deny" type="function">
+      Helper method for returning a deny result from your policy's commit function
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+## Response Schemas
+
+### Allow Response
+
+<ParamField path="commitAllowResultSchema" type="ZodSchema" required>
+  A Zod schema that defines the structure of successful commit results. Include details about what state was updated, such as new spending totals or execution counts.
+</ParamField>
+
+### Deny Response
+
+<ParamField path="commitDenyResultSchema" type="ZodSchema" required>
+  A Zod schema that defines the structure of failed commit results. Include details about why the commit failed and what data was being updated.
+</ParamField>
+
+<Tabs>
+  <Tab title="Allow Schema">
+    ```typescript
+    import { createVincentPolicy } from '@lit-protocol/vincent-ability-sdk';
+    import { z } from 'zod';
+
+    const vincentPolicy = createVincentPolicy({
+      // ... other policy definitions
+
+      commitAllowResultSchema: z.object({
+        updatedDailySpending: z.number(),
+        remainingDailyLimit: z.number(),
+      }),
+    });
+    ```
+  </Tab>
+  <Tab title="Deny Schema">
+    ```typescript
+    import { createVincentPolicy } from '@lit-protocol/vincent-ability-sdk';
+    import { z } from 'zod';
+
+    const vincentPolicy = createVincentPolicy({
+      // ... other policy definitions
+
+      commitDenyResultSchema: z.object({
+        reason: z.string(),
+        vincentAppId: z.number(),
+        spenderAddress: z.string(),
+        spentAmount: z.number(),
+        spentTokenAddress: z.string(),
+      }),
+    });
+    ```
+  </Tab>
+</Tabs>
+
+<Note>
+If any unhandled error occurs during commit, the Vincent Ability SDK automatically returns a deny result with the error message.
+</Note>
+
+## Example Implementation
+
+```typescript
+import { createVincentPolicy } from '@lit-protocol/vincent-ability-sdk';
+import { z } from 'zod';
+
+const vincentPolicy = createVincentPolicy({
+  // ... other policy definitions
+
+  commitParamsSchema: z.object({
+    spentAmount: z.number(),
+    tokenAddress: z.string(),
+  }),
+
+  commitAllowResultSchema: z.object({
+    updatedDailySpending: z.number(),
+    remainingDailyLimit: z.number(),
+  }),
+
+  commitDenyResultSchema: z.object({
+    reason: z.string(),
+    vincentAppId: z.number(),
+    spenderAddress: z.string(),
+    spentAmount: z.number(),
+    spentTokenAddress: z.string(),
+  }),
+
+  commit: async (params, policyContext) => {
+    const { spentAmount, tokenAddress } = params;
+
+    try {
+      const { updatedDailySpending, remainingDailyLimit } = await updateSpentAmount({
+        vincentAppId: policyContext.appId,
+        spenderAddress: policyContext.delegation.delegatorPkpInfo.ethAddress,
+        spentAmount,
+        spentTokenAddress: tokenAddress,
+      });
+
+      return policyContext.allow({
+        updatedDailySpending,
+        remainingDailyLimit,
+      });
+    } catch (error) {
+      return policyContext.deny({
+        reason: 'Failed to update spending limit',
+        vincentAppId: policyContext.appId,
+        spenderAddress: policyContext.delegation.delegatorPkpInfo.ethAddress,
+        spentAmount,
+        spentTokenAddress: tokenAddress,
+      });
+    }
+  },
+});
+```
+
+## Best Practices
+
+1. **Always Implement for Stateful Policies** - Any Policy that tracks limits, counts, or cumulative data needs a commit function
+2. **Handle Partial Failures** - Design for scenarios where some updates succeed and others fail
+3. **Use Transactions** - Ensure atomicity when updating multiple records or contracts
+4. **Log State Changes** - Maintain audit trails of all policy state modifications
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Publishing Policies" icon="upload" href="/ability/policy/publishing">
+    Publish your Policy for use in Vincent Apps
+  </Card>
+  <Card title="Policy Quick Start" icon="rocket" href="/ability/policy/quickstart">
+    Build your first Policy from scratch
+  </Card>
+</CardGroup>
+
+---
+
+# Policy: Parameter Schemas
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/ability/policy/parameter-schemas.mdx
+
+---
+title: Defining Parameters
+---
+
+Define the structure and validation for your Policy's parameters using Zod schemas. Policies use two distinct parameter types to maintain security boundaries.
+
+## Parameters from Abilities
+
+The `abilityParamsSchema` defines what parameters Vincent Abilities must provide when your Policy evaluates their execution request. The Vincent Ability receives these parameters from the ability executor, and the Vincent Ability SDK handles passing these parameters to your policy as `abilityParams`.
+
+### Schema Definition
+
+<ParamField path="abilityParamsSchema" type="ZodSchema" required>
+  A Zod schema object that defines the structure and validation rules for parameters passed from Abilities to your Policy. These parameters should be what your policy requires to make its checks and validations.
+</ParamField>
+
+```typescript
+import { createVincentPolicy } from '@lit-protocol/vincent-ability-sdk';
+import { z } from 'zod';
+
+const vincentPolicy = createVincentPolicy({
+  // ... other policy definitions
+
+  abilityParamsSchema: z.object({
+    tokenAddress: z.string(),
+    amount: z.number(),
+  }),
+});
+```
+
+Your policy can then check whether spending `amount` of `tokenAddress` would exceed the Vincent App User's configured spending limit by querying its database or smart contract.
+
+### Common Patterns
+
+<Tabs>
+  <Tab title="Financial Policies">
+    ```typescript
+    const abilityParamsSchema = z.object({
+      tokenAddress: z.string(),
+      amount: z.number().positive(),
+      // Optional price/value context
+      usdValue: z.number().positive().optional(),
+      pricePerToken: z.number().positive().optional(),
+    });
+    ```
+  </Tab>
+  <Tab title="Access Control">
+    ```typescript
+    const abilityParamsSchema = z.object({
+      resourceId: z.string(),
+      action: z.enum(["read", "write", "execute"]),
+      // Context for permission checking
+      requesterAddress: z.string(),
+      timestamp: z.number(),
+    });
+    ```
+  </Tab>
+  <Tab title="Rate Limiting">
+    ```typescript
+    const abilityParamsSchema = z.object({
+      operationType: z.string(),
+      // Minimal params for rate limiting
+      timestamp: z.number(),
+      resourceIdentifier: z.string().optional(),
+    });
+    ```
+  </Tab>
+</Tabs>
+
+## User-Defined Parameters
+
+The `userParamsSchema` defines the structure of on-chain parameters that Vincent App Users configure for your policy. These parameters are fetched from the Vincent smart contract during execution of your Policy's precheck and evaluate functions.
+
+### Schema Definition
+
+<ParamField path="userParamsSchema" type="ZodSchema" required>
+  A Zod schema object that defines user-configurable boundaries stored securely on-chain. These parameters are unique to each Ability and App combination, and cannot be altered by the App or ability executor during execution.
+</ParamField>
+
+```typescript
+import { createVincentPolicy } from '@lit-protocol/vincent-ability-sdk';
+import { z } from 'zod';
+
+const vincentPolicy = createVincentPolicy({
+  // ... other policy definitions
+
+  userParamsSchema: z.object({
+    dailySpendingLimit: z.number(),
+    allowedTokens: z.array(z.string()).optional(),
+  }),
+});
+```
+
+This would allow the Vincent App User to specify how much of a token they are allowing the Vincent App to spend on their behalf in a day, as well as the specific tokens that are allowed to be spent.
+
+## Validation Best Practices
+
+1. **Keep Ability Params Minimal** - Only require parameters you actually need for policy decisions
+2. **Make User Params Flexible** - Provide sensible defaults and optional parameters for user convenience
+3. **Use Descriptive Validation** - Add custom error messages to help with debugging
+4. **Consider Future Needs** - Design schemas that can evolve without breaking existing deployments
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Precheck Function" icon="check" href="/ability/policy/precheck-function">
+    Use your parameters in local validation logic
+  </Card>
+  <Card title="Evaluate Function" icon="magnifying-glass" href="/ability/policy/evaluate-function">
+    Implement validation logic with your parameters
+  </Card>
+</CardGroup>
+
+---
+
+# Policy: Official Policies Overview
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/ability/policy/official-policies/overview.mdx
+
+---
+title: Official Policies
+---
+
+## Vincent Policies Created by the Vincent Team
+
+| Policy                                       | Category          | Description                                                                                                                                            |
+| -------------------------------------------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| [Contract Whitelist](./contract-whitelist) | Access Control    | Enforces strict access control for blockchain transactions by ensuring Vincent Apps can only interact with pre-approved smart contracts and functions. |
+| [Spending Limit](./spending-limit)         | Financial Control | Enables Vincent App Users to set daily USD spending limits that restrict how much value Vincent Apps can spend on their behalf through transactions.   |
+
+
+---
+
+# Wallet Providers: Introduction
+
+Source: https://raw.githubusercontent.com/LIT-Protocol/Vincent/main/docs/wallet-providers/introduction.mdx
+
+---
+title: 'Introduction'
+---
+
+The Vincent API enables wallet providers to manage gasless app installations, query agent smart accounts, and handle permission flows for users. Through these endpoints, wallets can install apps on behalf of users, retrieve agent wallet addresses and token balances, and allow users to revoke or restore app permissions.
+
+## Integration Flow Overview
+
+```mermaid
+%%{init: {"theme":"base","themeVariables":{"primaryColor":"transparent","primaryTextColor":"#FF4205","primaryBorderColor":"#FF4205","lineColor":"#FF4205"}}}%%
+sequenceDiagram
+    participant User
+    participant Wallet as Wallet Provider
+    participant API as Vincent API
+    participant Chain as Blockchain
+
+    User->>Wallet: Connect wallet
+    Wallet->>API: GET /app/:appId
+    API-->>Wallet: App info (name, description, abilities)
+
+    User->>Wallet: Install app
+    Wallet->>API: POST /user/:appId/install-app
+    API-->>Wallet: Installation data to sign
+
+    User->>Wallet: Sign transaction
+    Wallet->>API: POST /user/:appId/complete-installation
+    API->>Chain: Submit via Gelato Relay
+    Chain-->>API: Transaction confirmed
+    API-->>Wallet: Transaction hash
+
+    Wallet->>API: POST /user/:appId/agent-account
+    API-->>Wallet: Agent smart account address
+    Wallet->>User: Display installed app with agent address
+```
+
+## Available Endpoints
+
+| Endpoint | Description |
+|----------|-------------|
+| [GET /app/:appId](/wallet-providers/get-app) | Fetch app details before installation |
+| [POST /user/:appId/install-app](/wallet-providers/install-app) | Initiate app installation (also handles re-enabling uninstalled apps) |
+| [POST /user/:appId/complete-installation](/wallet-providers/complete-installation) | Complete installation with signature |
+| [POST /user/:appId/agent-account](/wallet-providers/agent-account) | Get user's agent smart account address |
+| [POST /user/:appId/agent-funds](/wallet-providers/agent-funds) | Get token balances for agent account |
+| [POST /user/:appId/uninstall-app](/wallet-providers/uninstall-app) | Initiate app uninstallation |
+| [POST /user/:appId/complete-uninstall](/wallet-providers/complete-uninstall) | Complete app uninstallation |
+| [POST /user/:appId/request-withdraw](/wallet-providers/request-withdraw) | Initiate withdrawal from agent account |
+| [POST /user/:appId/complete-withdraw](/wallet-providers/complete-withdraw) | Complete withdrawal with signature |
+
+## Smart Account Index Derivation
+
+Each app installation creates a unique smart account address derived from the user's wallet address and the app ID. This ensures:
+
+- **Deterministic addresses**: The same user + app combination always produces the same agent address
+- **App isolation**: Each app gets its own dedicated smart account
+- **Consistent lookup**: Wallet providers can reliably query agent addresses
+
+The index is derived using: `keccak256("vincent_app_id_{appId}")`
+
+To derive the address client-side (for verification):
+
+```typescript
+import { getKernelAddressFromECDSA } from '@zerodev/ecdsa-validator';
+import { constants } from '@zerodev/sdk';
+import { deriveSmartAccountIndex } from '@lit-protocol/vincent-contracts-sdk';
+
+const agentAddress = await getKernelAddressFromECDSA({
+  publicClient,
+  eoaAddress: userWalletAddress,
+  index: deriveSmartAccountIndex(appId),
+  entryPoint: constants.getEntryPoint('0.7'),
+  kernelVersion: constants.KERNEL_V3_3,
+});
+```

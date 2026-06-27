@@ -1,0 +1,15 @@
+# Claude Code workspace
+.claude/
+
+# macOS
+.DS_Store
+
+# Python tooling caches
+.mypy_cache/
+__pycache__/
+*.py[cod]
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
