@@ -25,6 +25,8 @@ def emit(
     outcome: str,            # "allowed" | "denied"
     reason: str = "",
     charge_id: str | None = None,
+    vendor: str = "",
+    amount_cents: int = 0,
 ) -> dict:
     event = {
         "ts": datetime.now(timezone.utc).isoformat(),
@@ -33,6 +35,8 @@ def emit(
         "sandbox_id": sandbox_id,
         "credential_ref": credential_ref,
         "intent": intent,
+        "vendor": vendor,
+        "amount_cents": amount_cents,
         "action": action,
         "outcome": outcome,
         "reason": reason,
@@ -45,4 +49,7 @@ def emit(
             fh.write(line + "\n")
     except OSError:
         pass  # stdout is the source of truth; file is a convenience
+    from app import store  # local import to avoid any import-order coupling
+
+    store.add_transaction(event)
     return event

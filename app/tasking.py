@@ -62,6 +62,8 @@ def delegate(record: OwnerRecord, text: str) -> str:
         outcome=result.outcome,
         reason=result.reason if result.outcome == "denied" else ("simulated" if result.simulated else ""),
         charge_id=result.charge_id,
+        vendor=manifest.vendor,
+        amount_cents=manifest.amount_cents,
     )
     return _reply(manifest, result)
 

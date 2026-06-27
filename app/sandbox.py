@@ -37,7 +37,14 @@ def _run_in_daytona(manifest: IntentManifest) -> ChargeResult:
         sandbox = client.create(
             CreateSandboxFromImageParams(
                 image="python:3.11-slim",
-                ephemeral=True,  # auto-destroyed; nothing stands between tasks (NFR004)
+                # ephemeral only when we'll auto-destroy; kept-alive demos must persist.
+                ephemeral=config.sandbox_destroy,
+                # labels make the sandbox identifiable in the Daytona dashboard.
+                labels={
+                    "app": "claim-by-text",
+                    "owner": manifest.owner_phone[:16],
+                    "intent": manifest.task[:60],
+                },
                 env_vars={
                     # SA token reaches the sandbox so it can auth headlessly to 1Password.
                     "OP_SERVICE_ACCOUNT_TOKEN": config.op_token or "",
@@ -61,8 +68,12 @@ def _run_in_daytona(manifest: IntentManifest) -> ChargeResult:
             simulated=False,
         )
     finally:
-        if sandbox is not None:
+        if sandbox is not None and config.sandbox_destroy:
             try:
                 sandbox.delete()
+                print(f"[sandbox] destroyed {getattr(sandbox, 'id', '?')} — nothing left to steal", flush=True)
             except Exception as exc:
                 print(f"[sandbox] teardown warning: {exc}", flush=True)
+        elif sandbox is not None:
+            print(f"[sandbox] KEPT ALIVE for demo: {getattr(sandbox, 'id', '?')} "
+                  f"(SANDBOX_DESTROY=false) — destroy it manually after", flush=True)

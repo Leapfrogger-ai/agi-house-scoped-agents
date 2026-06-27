@@ -19,6 +19,9 @@ class Config:
 
     # Daytona
     daytona_api_key: str | None = os.getenv("DAYTONA_API_KEY") or None
+    # Default true (auto-destroy = the thesis). Set false for a demo where you want to
+    # watch the sandbox persist in the Daytona dashboard before tearing it down.
+    sandbox_destroy: bool = os.getenv("SANDBOX_DESTROY", "true").lower() not in ("0", "false", "no")
 
     # Nebius (manifest parse) — OpenAI-compatible
     nebius_api_key: str | None = os.getenv("NEBIUS_API_KEY") or None

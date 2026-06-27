@@ -44,13 +44,22 @@ async def _resolve_and_charge(m: dict) -> dict:
     import stripe
 
     stripe.api_key = key
+    vendor = m["vendor"]
     intent = stripe.PaymentIntent.create(
         amount=m["amount_cents"],
         currency="usd",
         payment_method="pm_card_visa",
         confirm=True,
         automatic_payment_methods={"enabled": True, "allow_redirects": "never"},
-        description=m["task"],
+        # Vendor up front in the description + as structured metadata, so the Stripe
+        # dashboard clearly shows who was paid and on whose authority.
+        description=f"{vendor} — {m['task']}",
+        metadata={
+            "vendor": vendor,
+            "owner_phone": m["owner_phone"],
+            "intent": m["task"],
+            "amount_cents": str(m["amount_cents"]),
+        },
     )
     del key  # drop it the instant the charge is made
     return {"outcome": "allowed", "reason": "", "charge_id": intent.id}
