@@ -1,0 +1,14 @@
+# Orchestrator (Railway) + sandbox workload (Daytona) share this set for simplicity.
+# Pinned at first install; bump deliberately. Python 3.11+.
+fastapi==0.138.1
+uvicorn[standard]==0.49.0
+pydantic==2.13.4
+python-multipart==0.0.32   # FastAPI form parsing for Twilio's webhook POST
+httpx==0.28.1
+
+# Sponsor + service SDKs
+onepassword-sdk==0.4.0     # owner registry (vault items) + inline Stripe resolve
+daytona==0.192.0           # ephemeral sandbox lifecycle
+stripe==15.3.0             # test-mode charge (runs inside the sandbox)
+openai==2.44.0             # Nebius Token Factory is OpenAI-compatible (manifest parse)
+twilio==9.10.9             # WhatsApp Sandbox adapter (stretch)

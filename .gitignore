@@ -13,3 +13,9 @@ __pycache__/
 .env
 .env.*
 !.env.example
+
+# Virtualenv & runtime artifacts (never commit)
+.venv/
+owners.json
+audit.jsonl
+*.db
