@@ -37,6 +37,7 @@ def _run_in_daytona(manifest: IntentManifest) -> ChargeResult:
         sandbox = client.create(
             CreateSandboxFromImageParams(
                 image="python:3.11-slim",
+                ephemeral=True,  # auto-destroyed; nothing stands between tasks (NFR004)
                 env_vars={
                     # SA token reaches the sandbox so it can auth headlessly to 1Password.
                     "OP_SERVICE_ACCOUNT_TOKEN": config.op_token or "",

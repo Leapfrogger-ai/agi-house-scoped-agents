@@ -50,31 +50,38 @@ class VaultRegistry:
 
         title = f"{_ITEM_PREFIX}{record.hashed_phone}"
         blob = json.dumps(asdict(record))
-        fields = [ItemField(id=_FIELD, title=_FIELD, field_type=ItemFieldType.CONCEALED, value=blob)]
+        vault_id = await self._vault_id()
 
-        # upsert: try to find an existing item; create if absent.
-        existing = await self._find(title)
+        # upsert: update the existing item's field if present, else create.
+        existing = await self._find(vault_id, title)
         if existing is not None:
-            existing.fields = fields
+            for f in existing.fields:
+                if f.id == _FIELD or f.title == _FIELD:
+                    f.value = blob
+                    break
+            else:
+                existing.fields.append(
+                    ItemField(id=_FIELD, title=_FIELD, field_type=ItemFieldType.CONCEALED, value=blob)
+                )
             await self._client.items.put(existing)
             return
         await self._client.items.create(
             ItemCreateParams(
                 title=title,
-                category=ItemCategory.API_CREDENTIAL,
-                vault_id=await self._vault_id(),
-                fields=fields,
+                category=ItemCategory.APICREDENTIALS,
+                vault_id=vault_id,
+                fields=[ItemField(id=_FIELD, title=_FIELD, field_type=ItemFieldType.CONCEALED, value=blob)],
             )
         )
 
     async def _vault_id(self) -> str:
-        async for v in await self._client.vaults.list_all():
+        for v in await self._client.vaults.list():
             if v.title == self._vault:
                 return v.id
         raise RuntimeError(f"vault {self._vault!r} not found")
 
-    async def _find(self, title: str):
-        async for it in await self._client.items.list_all(await self._vault_id()):
+    async def _find(self, vault_id: str, title: str):
+        for it in await self._client.items.list(vault_id):
             if it.title == title:
-                return await self._client.items.get(await self._vault_id(), it.id)
+                return await self._client.items.get(vault_id, it.id)
         return None
