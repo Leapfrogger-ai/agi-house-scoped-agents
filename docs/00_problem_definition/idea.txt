@@ -1,0 +1,24 @@
+Recommended Build: Intent-Scoped Agent Harness with Zero-Standing-Privilege
+This hits both sponsors natively and addresses the blog's open research question directly.
+
+The idea: An agent orchestration wrapper where:
+
+Each task declaration includes a machine-readable intent manifest (what tools, what scope, what time budget)
+
+At task start, 1Password Environments injects only the credentials that manifest requires — nothing more, nothing from .env1password+1
+
+The agent runs inside a Daytona ephemeral sandbox — isolated compute, scoped filesystem, auto-destroyed on task completiondaytonayoutube
+
+A lightweight conformance monitor watches tool calls against the declared intent and halts + logs on divergence (the "intent-conformance monitor" idea from the blog)1password
+
+Every action emits a structured audit event binding: agent ID → human delegator → credential used → intent → outcome
+
+Why this wins the room:
+
+It directly answers the blog's on-stage question on all three axes (authority, delegation, accountability)
+
+It uses both sponsors' core capabilities in a non-superficial way
+
+It demonstrates the "secretless" pattern — Daytona sandbox proves it is the authorized workload, 1Password releases credentials to that proven workload, not to the model context1password+1
+
+The intent-conformance angle is explicitly called out as "unsettled frontier" in the brief — you'd be demoing something the field hasn't solved
