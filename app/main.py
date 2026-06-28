@@ -15,7 +15,8 @@ from pydantic import BaseModel
 from app import conversation, store
 from app.channel import get_adapter
 from app.config import config
-from app.operator import PAGE
+from app.landing import PAGE as LANDING
+from app.operator import PAGE as OPERATOR
 from app.registry import get_registry, hash_phone
 
 app = FastAPI(title="claim-an-agent-by-text")
@@ -48,8 +49,15 @@ def health() -> dict:
 
 
 @app.get("/", response_class=HTMLResponse)
+def landing() -> str:
+    """Judge-facing landing + in-browser interactive demo."""
+    return LANDING
+
+
+@app.get("/operator", response_class=HTMLResponse)
 def operator() -> str:
-    return PAGE
+    """Pure operator view (phone-driven three-up demo)."""
+    return OPERATOR
 
 
 @app.get("/ops/data")

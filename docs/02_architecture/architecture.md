@@ -51,8 +51,9 @@ claim-by-text/
 │   ├── vendors.py           # name -> connected-account roster (Connect routing; STRIPE_MODE)
 │   ├── sandbox.py           # Daytona create → run workload → destroy
 │   ├── audit.py             # emit(event) -> JSONL stdout + file (+ operator store)
-│   ├── operator.py          # operator view: chat thread + transactions (served at "/")
-│   ├── store.py             # in-memory demo store for the operator view
+│   ├── landing.py           # judge-facing landing + in-browser interactive demo (served at "/")
+│   ├── operator.py          # operator view: chat thread + transactions (served at "/operator")
+│   ├── store.py             # in-memory demo store for the landing + operator views
 │   └── workload/
 │       └── execute_charge.py  # RUNS INSIDE DAYTONA: 1P resolve → gate → Stripe → audit → JSON out
 ├── run_mock.py              # local entrypoint using mock.py (offline demo backstop)
