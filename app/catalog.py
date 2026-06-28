@@ -28,13 +28,9 @@ _FROM = re.compile(r"\bfrom\s+([A-Za-z][\w&.\-]*)", re.IGNORECASE)
 
 
 def resolve(name: str) -> tuple[int, str] | None:
-    key = name.strip().casefold()
-    if key in CATALOG:
-        return CATALOG[key]
-    for k, v in CATALOG.items():  # loose contains match ("a keyboard" -> keyboard)
-        if k in key or key in k:
-            return v
-    return None
+    """Exact (case-insensitive) match only. Loose substring matching is unsafe here —
+    e.g. "desk" must NOT hijack "desk lamp" and override a user's explicit price."""
+    return CATALOG.get(name.strip().casefold())
 
 
 def scan(text: str) -> list[Item]:

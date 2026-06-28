@@ -10,7 +10,7 @@ from __future__ import annotations
 import hashlib
 from dataclasses import dataclass
 
-from app import audit, catalog, copy, grounding
+from app import audit, catalog, copy, grounding, planner
 from app.config import config
 from app.manifest import IntentManifest, Item, ParseError, parse_task
 from app.policy import evaluate, evaluate_fields
@@ -29,18 +29,78 @@ class ChargeResult:
     simulated: bool
 
 
+def planner_enabled() -> bool:
+    return config.nebius_configured
+
+
 def delegate(record: OwnerRecord, text: str, registry: Registry) -> str:
-    """Route a purchase. Catalog items -> the intent-check loop; anything else ->
-    the original single-charge path (unchanged)."""
+    """When Nebius is available, an LLM planner interprets free-form requests and
+    fills missing slots conversationally. Offline, fall back to the deterministic
+    catalog/parse path."""
+    if planner_enabled():
+        return _planned(record, text, registry)
+
     goal = catalog.extract_goal(text)
     if goal and goal != record.active_goal:
         record.active_goal = goal           # declared goal persists for later items
         registry.upsert(record)
-
     items = catalog.scan(text)
     if items:
         return _multi(record, items)
     return _single(record, text)
+
+
+def _planned(record: OwnerRecord, text: str, registry: Registry) -> str:
+    """Flexible path: plan -> (maybe ask) -> charge. Remembers an in-progress request
+    on record.pending_task so the user can answer over several turns."""
+    try:
+        p = planner.plan(text, record.pending_task, record.vendor_allowlist, record.budget_cents)
+    except Exception:  # planner hiccup -> deterministic fallback, never block
+        record.pending_task = None
+        items = catalog.scan(text)
+        return _multi(record, items) if items else _single(record, text)
+
+    intent = p["intent"]
+    if intent == "settings":  # policy changes stay DETERMINISTIC, never LLM-applied
+        _clear_pending(record, registry)
+        return copy.SETTINGS_HINT
+    if intent == "cancel":
+        _clear_pending(record, registry)
+        return copy.CANCELLED
+    if intent == "smalltalk" and not p["items"]:
+        _clear_pending(record, registry)
+        return copy.welcome_back(record.name or record.agent_id)
+
+    items = p["items"]
+    goal = p["goal"] or (record.pending_task or {}).get("goal")
+    if not items:
+        record.pending_task = {"goal": goal, "items": []}
+        registry.upsert(record)
+        return p["question"] or copy.NEED_TASK_DETAILS
+
+    missing = [it for it in items if it["amount_cents"] is None or not it["vendor"]]
+    if missing:  # slot-filling: remember progress, ask one question
+        record.pending_task = {"goal": goal, "items": items}
+        registry.upsert(record)
+        return p["question"] or copy.clarify(missing[0]["name"], record.vendor_allowlist)
+
+    # complete -> charge through the same gate + intent-grounding loop
+    record.pending_task = None
+    item_objs = [Item(description=it["name"], amount_cents=it["amount_cents"], vendor=it["vendor"])
+                 for it in items[:MAX_ITEMS]]
+    # Only a DECLARED multi-item task (a purpose + several items) sets the persistent
+    # goal. A single ad-hoc purchase must NOT redefine it — otherwise an off-task item
+    # would set its own goal and pass its own grounding check (defeating intent-drift).
+    if len(item_objs) >= 2 and goal and goal != record.active_goal:
+        record.active_goal = goal
+    registry.upsert(record)
+    return _multi(record, item_objs)
+
+
+def _clear_pending(record: OwnerRecord, registry: Registry) -> None:
+    if record.pending_task is not None:
+        record.pending_task = None
+        registry.upsert(record)
 
 
 def _single(record: OwnerRecord, text: str) -> str:

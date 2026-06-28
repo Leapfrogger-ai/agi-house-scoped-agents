@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import re
 
-from app import catalog, copy, settings
+from app import catalog, copy, settings, tasking
 from app.registry import (
     AWAITING_NAME,
     READY,
@@ -20,6 +20,7 @@ from app.tasking import delegate
 
 # A message is a purchase intent if it mentions money or a buy/pay verb.
 _PURCHASE = re.compile(r"\$|\d|\b(buy|pay|purchase|order|spend)\b", re.IGNORECASE)
+_GREETING = re.compile(r"^\s*(hi|hey|hello|yo|sup|gm|good\s+morning|thanks|thank\s+you|ok|okay)\b", re.IGNORECASE)
 _HAS_WORD = re.compile(r"\w")
 
 
@@ -64,7 +65,13 @@ def handle(phone: str, text: str, registry: Registry | None = None) -> str:
             return str(hint)
         if cmd is not None:
             return settings.apply(record, cmd, registry)
-        if _PURCHASE.search(text) or catalog.has_items(text):
+        # Snappy greeting path — skip the planner for an obvious "hey" (unless mid task).
+        if not record.pending_task and _GREETING.search(text) \
+                and not _PURCHASE.search(text) and not catalog.has_items(text):
+            return copy.welcome_back(record.name or record.agent_id)
+        # Free-form / in-progress / purchase-ish -> delegate (planner when Nebius is on).
+        if record.pending_task or _PURCHASE.search(text) or catalog.has_items(text) \
+                or tasking.planner_enabled():
             return delegate(record, text, registry)
         return copy.welcome_back(record.name or record.agent_id)
 
