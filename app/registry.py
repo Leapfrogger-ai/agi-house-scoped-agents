@@ -65,17 +65,26 @@ class JsonRegistry:
         self._path.write_text(json.dumps(self._data, indent=2))
 
 
+_registry: Registry | None = None
+
+
 def get_registry() -> Registry:
     """Vault registry when 1Password is configured AND reachable; else JSON fallback.
 
-    The vault impl (Story 1.5) is verified live once OP_SERVICE_ACCOUNT_TOKEN is in
-    hand; until then every flow uses JSON so development is never blocked.
+    Memoized so we authenticate to 1Password once per process, not per request. The
+    vault impl (Story 1.5) is verified live once OP_SERVICE_ACCOUNT_TOKEN is in hand;
+    until then every flow uses JSON so development is never blocked.
     """
+    global _registry
+    if _registry is not None:
+        return _registry
     if config.op_configured:
         try:
             from app.registry_vault import VaultRegistry
 
-            return VaultRegistry()
+            _registry = VaultRegistry()
+            return _registry
         except Exception:
             pass  # documented fallback — keep the loop alive
-    return JsonRegistry()
+    _registry = JsonRegistry()
+    return _registry

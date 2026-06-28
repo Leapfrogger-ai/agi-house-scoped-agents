@@ -49,10 +49,13 @@ User → (any text, e.g. "CLAIM")
 Bot  ← 👋 New agent incoming! You're claiming *Agent #A4*.
         Reply with a name to lock it in.            [state: AWAITING_NAME]
 User → Budgetbot
-Bot  ← ✅ Done — you own *Budgetbot*, and your number is the key 🔑
-        Text me a task, like "buy 50 staples from Acme".   [state: READY, owner VERIFIED]
+Bot  ← ✅ Done — you own *Budgetbot* 🔑
+        Starting limits: budget *$50*, vendors *Acme*.
+        Change anytime: "budget 100" or "allow Acme, Staples".
+        Text a task like "buy $30 from Acme".              [state: READY, owner VERIFIED]
 ```
 *The second inbound (the name) is the verification — proves live two-way control of the number.*
+*Defaults are surfaced at claim (no onboarding state) so they're transparent and editable.*
 
 ### J2 — Delegate a Task *(happy path, act immediately)*
 ```
@@ -76,6 +79,30 @@ User → hey
 Bot  ← 👋 Welcome back — *Budgetbot* here. What's the task?
 ```
 
+### J5 — Settings (budget & allowlist, handled in READY)
+
+A `READY` message starting with `budget` or `allow` (case-insensitive) is a **settings
+command**; anything else falls through to the task path, unchanged. Both set-commands
+**overwrite** the field (no merge) — predictable for a demo. Deterministic parser, no LLM:
+**only the verified owner can change policy — never the agent.**
+
+| Input | Effect | Reply |
+|---|---|---|
+| `budget 100` | budget → $100 | `💰 Budget set to *$100*.` |
+| `budget $1,200` | budget → $1,200 | `💰 Budget set to *$1,200*.` |
+| `budget` | view | `💰 Your budget is *$50*.` |
+| `allow Acme, Staples` | allowlist → [Acme, Staples] | `🔒 Approved vendors: *Acme*, *Staples*.` |
+| `allow` | view | `🔒 Approved vendors: *Acme*.` |
+
+```
+User → buy $80 from Acme
+Bot  ← 🛑 That's *$80* — over your *$50* budget. Didn't charge a cent.
+User → budget 100
+Bot  ← 💰 Budget set to *$100*.
+User → buy $80 from Acme
+Bot  ← 💸 Paid *Acme* *$80.00*. $20.00 left on this task.
+```
+
 ## 5. Error & Recovery States
 
 | Situation | Bot reply |
@@ -85,6 +112,9 @@ Bot  ← 👋 Welcome back — *Budgetbot* here. What's the task?
 | Reply during `AWAITING_NAME` that isn't a name (e.g. emoji-only/blank) | 🙂 Just need a name for your agent — reply with one word. |
 | Charge fails downstream (Stripe/sandbox error) | ⚠️ Something broke on my end — no charge went through. Try again in a sec. |
 | Duplicate "CLAIM" from an already-verified owner | 👋 You already own *Budgetbot*. Just text me a task. |
+| Bad budget command (`budget abc`) | 🤔 Try "budget *100*" — a dollar amount. |
+| Empty allow command (`allow , ,`) | 🤔 Try "allow *Acme, Staples*". |
+| Vendor approved but no payout account (Connect mode) | 🛑 *Vendor* is approved, but I don't have a payout account for them yet. No charge. |
 
 **Recovery principle**: every error says (a) what's wrong, (b) that no money moved if relevant, and
 (c) the exact next thing to type.

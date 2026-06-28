@@ -83,6 +83,8 @@ def _reply(m: IntentManifest, r: ChargeResult) -> str:
             return copy.denied_allowlist(m.vendor)
         if r.reason == "over-budget":
             return copy.denied_budget(_d(m.amount_cents), _d(m.budget_cents))
+        if r.reason == "vendor-not-payable":
+            return copy.denied_not_payable(m.vendor)
         return copy.CHARGE_BROKE
     remaining = max(0, m.budget_cents - m.amount_cents)
     return copy.receipt(m.vendor, _d(m.amount_cents), _d(remaining), r.charge_id or "pending")

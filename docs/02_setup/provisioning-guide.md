@@ -116,6 +116,16 @@ op item create --vault agent-identity --title stripe \
 # referenced at runtime as op://agent-identity/stripe/test_key
 ```
 
+**Optional — pay real (test) vendors via Stripe Connect (`STRIPE_MODE=connect`):**
+1. **Enable Connect** (human-gated, one-time): <https://dashboard.stripe.com/connect>. Until
+   this is done the API refuses `Account.create` / destination charges.
+2. We then create ~3–4 **test connected accounts** programmatically and build a roster
+   `{"Acme":"acct_...","Staples":"acct_..."}` → `VENDOR_ROSTER` env.
+3. Set `STRIPE_MODE=connect`; the in-sandbox charge becomes a **destination charge** so funds
+   route to the named vendor (visible as a transfer in the Stripe dashboard).
+   *Allowlist = policy (permitted names); roster = routing (payable accounts) — kept separate.*
+   Default `STRIPE_MODE=simple` (card charge into the platform) needs none of this.
+
 ### 4. Anthropic — manifest parsing (optional)
 
 Used in Story 2.4 to parse "buy office supplies, $30 from Acme" → intent manifest.

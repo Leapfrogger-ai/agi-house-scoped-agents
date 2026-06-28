@@ -143,6 +143,30 @@ implementation,
 
 ---
 
+### Story 1.7: Budget & allowlist settings over text *(Must — small)*
+
+**As a** verified owner,
+**I want** to view and change my budget and vendor allowlist by text,
+**So that** I control my own spending policy without leaving the chat.
+
+**Acceptance Criteria**:
+1. Given state `READY`, when I send `budget 100` / `allow Acme, Staples`, then the owner
+   record is overwritten and persisted via `registry.upsert()`, and I get a confirmation.
+2. Given `budget` / `allow` with no argument, then the current value is shown (view-only).
+3. Given a malformed command, then I get an in-voice hint and no change is made.
+4. Given a changed setting, when I retry a previously-blocked task, then the gate enforces
+   the new policy (no model change — same deterministic gate).
+
+**Tasks**:
+- [x] `app/settings.py`: deterministic `parse_settings_command()` + `apply()` (no LLM).
+- [x] One branch in `conversation.py` `READY` router, before the task path.
+- [x] Surface starting limits in the claim welcome; parser units + e2e tests.
+
+**Prerequisites**: 1.6. **Note**: zero data-model change — reuses existing `OwnerRecord`
+fields, `IntentManifest`, `policy.evaluate()`, audit event, and state machine.
+
+---
+
 ## Epic 2: Delegated Spending with Runtime Authority
 
 **Goal**: A verified owner delegates a spending task by text; the agent executes it in an ephemeral

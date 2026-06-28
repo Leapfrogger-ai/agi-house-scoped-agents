@@ -45,7 +45,7 @@ async def _resolve_and_charge(m: dict) -> dict:
 
     stripe.api_key = key
     vendor = m["vendor"]
-    intent = stripe.PaymentIntent.create(
+    params = dict(
         amount=m["amount_cents"],
         currency="usd",
         payment_method="pm_card_visa",
@@ -61,6 +61,17 @@ async def _resolve_and_charge(m: dict) -> dict:
             "amount_cents": str(m["amount_cents"]),
         },
     )
+
+    # STRIPE_MODE=connect: route funds to the vendor's connected account (destination
+    # charge). A policy-allowed vendor with no payout account is "approved but not payable".
+    if os.environ.get("STRIPE_MODE", "simple") == "connect":
+        roster = json.loads(os.environ.get("VENDOR_ROSTER", "{}"))
+        acct = next((a for n, a in roster.items() if n.strip().casefold() == vendor.strip().casefold()), None)
+        if not acct:
+            return {"outcome": "denied", "reason": "vendor-not-payable", "charge_id": None}
+        params["transfer_data"] = {"destination": acct}
+
+    intent = stripe.PaymentIntent.create(**params)
     del key  # drop it the instant the charge is made
     return {"outcome": "allowed", "reason": "", "charge_id": intent.id}
 
