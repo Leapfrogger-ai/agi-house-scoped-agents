@@ -31,6 +31,16 @@ PAGE = """<!doctype html>
   .cta:hover { filter:brightness(1.07); }
   .sub { color:var(--muted); font-size:13px; margin-top:12px; }
   .badges { color:var(--muted); font-size:13px; margin-top:18px; }
+  /* Slack stub (top-right) */
+  .slack-btn { position:fixed; top:14px; right:16px; z-index:20; display:inline-flex; align-items:center;
+    gap:8px; background:#16242c; border:1px solid #2b3b44; color:#e9edef; border-radius:22px;
+    padding:8px 14px; font-size:13.5px; cursor:pointer; }
+  .slack-btn:hover { background:#1d3038; }
+  .slack-btn svg { width:17px; height:17px; display:block; }
+  .slack-btn .soon { font-size:10px; background:rgba(255,214,107,.18); color:#FFD66B; padding:1px 6px; border-radius:8px; }
+  .toast { position:fixed; top:56px; right:16px; z-index:20; background:#111b21; border:1px solid #2b3b44;
+    color:#cfe; padding:9px 13px; border-radius:8px; font-size:13px; opacity:0; transition:opacity .2s; pointer-events:none; }
+  .toast.show { opacity:1; }
   /* app */
   #app { display:none; margin-top:26px; }
   .split { display:grid; grid-template-columns:1fr 1fr; gap:16px; height:560px; }
@@ -62,6 +72,20 @@ PAGE = """<!doctype html>
 </style>
 </head>
 <body>
+<button class="slack-btn" onclick="slackSoon()" title="Slack DM integration — coming soon">
+  <svg viewBox="0 0 122.8 122.8" aria-hidden="true">
+    <path d="M25.8 77.6c0 7.1-5.8 12.9-12.9 12.9S0 84.7 0 77.6s5.8-12.9 12.9-12.9h12.9v12.9z" fill="#E01E5A"/>
+    <path d="M32.3 77.6c0-7.1 5.8-12.9 12.9-12.9s12.9 5.8 12.9 12.9v32.3c0 7.1-5.8 12.9-12.9 12.9s-12.9-5.8-12.9-12.9V77.6z" fill="#E01E5A"/>
+    <path d="M45.2 25.8c-7.1 0-12.9-5.8-12.9-12.9S38.1 0 45.2 0s12.9 5.8 12.9 12.9v12.9H45.2z" fill="#36C5F0"/>
+    <path d="M45.2 32.3c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9H12.9C5.8 58.1 0 52.3 0 45.2s5.8-12.9 12.9-12.9h32.3z" fill="#36C5F0"/>
+    <path d="M97 45.2c0-7.1 5.8-12.9 12.9-12.9s12.9 5.8 12.9 12.9-5.8 12.9-12.9 12.9H97V45.2z" fill="#2EB67D"/>
+    <path d="M90.5 45.2c0 7.1-5.8 12.9-12.9 12.9s-12.9-5.8-12.9-12.9V12.9C64.7 5.8 70.5 0 77.6 0s12.9 5.8 12.9 12.9v32.3z" fill="#2EB67D"/>
+    <path d="M77.6 97c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9-12.9-5.8-12.9-12.9V97h12.9z" fill="#ECB22E"/>
+    <path d="M77.6 90.5c-7.1 0-12.9-5.8-12.9-12.9s5.8-12.9 12.9-12.9h32.3c7.1 0 12.9 5.8 12.9 12.9s-5.8 12.9-12.9 12.9H77.6z" fill="#ECB22E"/>
+  </svg>
+  Connect with Slack <span class="soon">Soon</span>
+</button>
+<div class="toast" id="toast">💬 Slack DM integration — coming soon.</div>
 <div class="wrap">
   <div class="hero">
     <h1>🔐 Scopebound</h1>
@@ -108,6 +132,12 @@ function esc(s){return (s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':
 function fmt(s){return esc(s).replace(/\\*([^*]+)\\*/g,'<b>$1</b>').replace(/\\n/g,'<br>');}
 function money(c){return '$'+((c||0)/100).toFixed(2);}
 const sleep = ms => new Promise(r=>setTimeout(r,ms));
+
+let toastT=null;
+function slackSoon(){
+  const t=document.getElementById('toast'); t.classList.add('show');
+  clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2600);
+}
 
 function launch(){
   document.getElementById('app').style.display='block';
