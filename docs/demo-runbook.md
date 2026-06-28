@@ -1,9 +1,9 @@
 # Demo Runbook — Claim-an-Agent-by-Text
 
-*The single doc to drive the live demo. Consolidates the SMS onboarding flow
-(`03_ux_design/conversation-design.md`), the budget/allowlist commands
-(`02_architecture/budget-allowlist-commands.md`), and the lean intent check
-(`01_product_requirements/PRD-intent-check-lean.md`). Read top-to-bottom while presenting.*
+*The single doc to drive the live demo. Consolidates the SMS onboarding flow + the
+budget/allowlist commands (`03_ux_design/conversation-design.md`, §J5) and the lean
+intent check (`01_product_requirements/PRD-intent-check-lean.md`). Read top-to-bottom
+while presenting.*
 
 **Target length on stage: ~2 minutes.** The whole authority story should read as one WhatsApp thread.
 
@@ -24,8 +24,9 @@
 - [ ] **Railway**: orchestrator deployed, webhook URL set in Twilio, logs view open.
 - [ ] **Three-up screen** arranged: **(1)** phone mirror / WhatsApp · **(2)** Stripe **test** dashboard
       · **(3)** audit log (Railway logs or `tail -f`).
-- [ ] **1Password**: `ClaimByText` vault open to show the owner item being created + the separate
-      `Stripe` item (the secret the agent never sees).
+- [ ] **1Password**: `AGI-House Details` vault open to show the owner item being created + the
+      separate `stripe` item (the secret the agent never sees). *(Vault name is set by `OP_VAULT`;
+      this is the one the Service Account can reach.)*
 - [ ] **Stripe** in **test mode** confirmed (no real charges).
 - [ ] **Fallback ready**: `python run_mock.py` runs the identical script offline if WhatsApp/Railway
       stalls (see bottom).
@@ -48,6 +49,9 @@
 
 *(Optional rule-based beat, only if time: send `buy a $500 chair from Acme` → 🛑 over your $400 budget.
 Shows the deterministic gate vs. the intent check are different layers.)*
+
+*Note: budget is enforced **per item** (each charge ≤ budget); the `$365/$400` running total is
+informational. Cumulative-budget enforcement is intentionally out of scope (see PRD §Out of Scope).*
 
 ---
 

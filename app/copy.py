@@ -78,7 +78,8 @@ def items_total(spent: str, budget: str) -> str:
 
 
 def denied_intent(desc: str, goal: str) -> str:
-    return f'🛑 Skipped — a *{desc}* isn\'t part of "*{goal}*". Didn\'t charge it.'
+    article = "an" if desc[:1].lower() in "aeiou" else "a"
+    return f'🛑 Skipped — {article} *{desc}* isn\'t part of "*{goal}*". Didn\'t charge it.'
 
 
 def welcome_back(name: str) -> str:
