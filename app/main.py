@@ -15,6 +15,7 @@ from pydantic import BaseModel
 from app import conversation, store
 from app.channel import get_adapter
 from app.config import config
+from app.explainer import EXPLAINER
 from app.landing import PAGE as LANDING
 from app.operator import PAGE as OPERATOR
 from app.registry import get_registry, hash_phone
@@ -58,6 +59,12 @@ def landing() -> str:
 def operator() -> str:
     """Pure operator view (phone-driven three-up demo)."""
     return OPERATOR
+
+
+@app.get("/explainer", response_class=HTMLResponse)
+def explainer() -> str:
+    """Self-contained interactive explainer (iframed into the landing page)."""
+    return EXPLAINER
 
 
 @app.get("/ops/data")

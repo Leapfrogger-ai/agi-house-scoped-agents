@@ -23,12 +23,11 @@ PAGE = """<!doctype html>
   .hero .tag { font-size:18px; color:var(--muted); margin:0 0 18px; }
   .q { border-left:3px solid var(--accent); padding:10px 16px; margin:18px 0; color:#cfe; font-style:italic; background:#0e1a17; border-radius:0 8px 8px 0; }
   .lead { font-size:15.5px; color:#d6dde0; max-width:760px; }
-  .axes { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin:22px 0; }
-  .axis { background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:14px; }
-  .axis h3 { margin:0 0 6px; font-size:13px; text-transform:uppercase; letter-spacing:.06em; color:var(--accent); }
-  .axis p { margin:0; font-size:13.5px; color:#cdd6da; }
+  .explainer { width:100%; max-width:800px; height:865px; border:1px solid var(--line);
+               border-radius:12px; background:#0d0f14; display:block; margin:20px auto 8px; }
+  .cta-row { display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:8px; }
   .cta { display:inline-flex; align-items:center; gap:10px; background:var(--accent); color:#04231a;
-         font-weight:700; font-size:17px; border:0; border-radius:30px; padding:14px 28px; cursor:pointer; margin-top:6px; }
+         font-weight:700; font-size:17px; border:0; border-radius:30px; padding:14px 28px; cursor:pointer; }
   .cta:hover { filter:brightness(1.07); }
   .sub { color:var(--muted); font-size:13px; margin-top:12px; }
   .badges { color:var(--muted); font-size:13px; margin-top:18px; }
@@ -68,17 +67,14 @@ PAGE = """<!doctype html>
     <h1>🔐 Scopebound</h1>
     <p class="tag">Claim an AI spending agent by text. It acts <b>as you</b> — and only within the scope you set.</p>
     <div class="q">When your agent acts, is it acting as itself, or as you? Where does its authority come from, and who answers for what it does?</div>
-    <p class="lead">Your phone number becomes the agent's owner. You delegate spending by text; each task runs in a
-      disposable <b>Daytona</b> sandbox that resolves a <b>Stripe</b> key from <b>1Password</b> only at the moment of the
-      charge — never a stored key. A deterministic policy gate contains over-budget and off-vendor spend, and an
-      <b>intent check</b> stops purchases that are in-budget and on-allowlist but <i>off-task</i>.</p>
-    <div class="axes">
-      <div class="axis"><h3>Acting as you</h3><p>The verified phone number is the human principal. The agent carries its own runtime identity and acts under your delegated authority.</p></div>
-      <div class="axis"><h3>Authority from</h3><p>Not a stored key, not the phone — the sandbox resolves the credential inline from 1Password at charge time. The verified workload <i>is</i> the credential.</p></div>
-      <div class="axis"><h3>Who answers</h3><p>A structured audit binds owner → sandbox → credential → intent → outcome for every action, including denials. The registry lives in the vault.</p></div>
+    <p class="lead">Step through how it works below — the trust gap, then the three layers that close it:
+      a disposable <b>Daytona</b> runtime, a deterministic <b>rule gate</b>, and an <b>intent observer</b>
+      that stops in-budget, on-vendor, but <i>off-task</i> spend. Then run it live.</p>
+    <iframe class="explainer" src="/explainer" title="How Scopebound works — interactive explainer" loading="lazy"></iframe>
+    <div class="cta-row">
+      <button class="cta" onclick="launch()">▶ Run Scopebound</button>
+      <span class="sub">Runs the real backend in your browser — no phone needed. (You can also text it on WhatsApp.)</span>
     </div>
-    <button class="cta" onclick="launch()">▶ Run Scopebound</button>
-    <div class="sub">Runs the real backend in your browser — no phone needed. (You can also text it on WhatsApp.)</div>
     <div class="badges">Built on <b>1Password</b> + <b>Daytona</b> · payments via <b>Stripe</b> (test mode) + Connect · orchestrator on Railway.</div>
   </div>
 
