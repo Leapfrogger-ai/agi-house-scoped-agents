@@ -37,6 +37,7 @@ class OwnerRecord:
     budget_cents: int = field(default_factory=lambda: config.default_budget_cents)
     vendor_allowlist: list[str] = field(default_factory=lambda: list(config.default_allowlist))
     history: list[str] = field(default_factory=list)
+    active_goal: str | None = None  # current declared goal (Intent Check, Epic 3)
 
     def to_json(self) -> str:
         return json.dumps(asdict(self))
