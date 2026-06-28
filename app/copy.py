@@ -68,6 +68,19 @@ def denied_not_payable(vendor: str) -> str:
     return f"🛑 *{vendor}* is approved, but I don't have a payout account for them yet. No charge."
 
 
+# --- Intent Check (multi-item) ---
+def bought(desc: str, dollars: str, vendor: str) -> str:
+    return f"💸 Bought *{desc}* *${dollars}* from *{vendor}*."
+
+
+def items_total(spent: str, budget: str) -> str:
+    return f"(*${spent}* / ${budget})"
+
+
+def denied_intent(desc: str, goal: str) -> str:
+    return f'🛑 Skipped — a *{desc}* isn\'t part of "*{goal}*". Didn\'t charge it.'
+
+
 def welcome_back(name: str) -> str:
     return f"👋 Welcome back — *{name}* here. What's the task?"
 

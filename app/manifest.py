@@ -13,6 +13,12 @@ from pydantic import BaseModel, Field
 from app.config import config
 
 
+class Item(BaseModel):
+    description: str
+    amount_cents: int
+    vendor: str
+
+
 class IntentManifest(BaseModel):
     owner_phone: str
     task: str
@@ -21,6 +27,10 @@ class IntentManifest(BaseModel):
     budget_cents: int
     vendor_allowlist: list[str]
     ttl_seconds: int = Field(default=300)
+    # Intent Check (Epic 3): optional declared goal + item list for multi-item tasks.
+    goal: str | None = None
+    items: list[Item] = Field(default_factory=list)
+    max_items: int = 5
 
 
 class ParseError(ValueError):

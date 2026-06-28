@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import re
 
-from app import copy, settings
+from app import catalog, copy, settings
 from app.registry import (
     AWAITING_NAME,
     READY,
@@ -64,8 +64,8 @@ def handle(phone: str, text: str, registry: Registry | None = None) -> str:
             return str(hint)
         if cmd is not None:
             return settings.apply(record, cmd, registry)
-        if _PURCHASE.search(text):
-            return delegate(record, text)
+        if _PURCHASE.search(text) or catalog.has_items(text):
+            return delegate(record, text, registry)
         return copy.welcome_back(record.name or record.agent_id)
 
     return copy.welcome_back(record.name or record.agent_id)

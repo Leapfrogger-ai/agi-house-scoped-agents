@@ -25,9 +25,14 @@ def DENY(reason: str) -> Verdict:  # noqa: N802 - reads as a constructor at call
 
 
 def evaluate(m: IntentManifest) -> Verdict:
-    if m.amount_cents > m.budget_cents:
+    return evaluate_fields(m.amount_cents, m.vendor, m.budget_cents, m.vendor_allowlist)
+
+
+def evaluate_fields(amount_cents: int, vendor: str, budget_cents: int, allowlist: list[str]) -> Verdict:
+    """Per-item gate — used for both single charges and each item in a multi-item loop."""
+    if amount_cents > budget_cents:
         return DENY("over-budget")
-    if not _on_allowlist(m.vendor, m.vendor_allowlist):
+    if not _on_allowlist(vendor, allowlist):
         return DENY("off-allowlist")
     return ALLOW
 
