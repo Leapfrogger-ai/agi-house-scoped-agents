@@ -51,6 +51,15 @@ def allow_show(vendors: list[str]) -> str:
 BUDGET_HINT = '🤔 Try "budget 100" — a dollar amount.'
 ALLOW_HINT = '🤔 Try "allow Acme, Staples".'
 
+# --- Flexible planner (free-form requests + slot-filling) ---
+NEED_TASK_DETAILS = '🤔 Tell me what to buy, how much, and from which approved vendor — e.g. "buy a $40 keyboard from Acme".'
+SETTINGS_HINT = '💡 To change your limits, say it exactly: "budget 500" or "allow Acme, Staples".'
+CANCELLED = "👍 Okay, cancelled. Text me a task whenever you're ready."
+
+
+def clarify(name: str, allowlist: list[str]) -> str:
+    return f"🤔 For *{name}*, what's the price and which vendor? Approved: {_bold_list(allowlist)}."
+
 
 def receipt(vendor: str, dollars: str, remaining: str, charge_id: str) -> str:
     return f"💸 Paid *{vendor}* *${dollars}*. ${remaining} left on this task.\nReceipt #{charge_id} ✅"

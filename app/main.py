@@ -15,8 +15,10 @@ from pydantic import BaseModel
 from app import conversation, store
 from app.channel import get_adapter
 from app.config import config
-from app.operator import PAGE
-from app.registry import hash_phone
+from app.explainer import EXPLAINER
+from app.landing import PAGE as LANDING
+from app.operator import PAGE as OPERATOR
+from app.registry import get_registry, hash_phone
 
 app = FastAPI(title="claim-an-agent-by-text")
 
@@ -26,6 +28,12 @@ def _turn(phone: str, text: str) -> str:
     store.add_message(phone, "in", text)
     reply = conversation.handle(phone, text)
     store.add_message(phone, "out", reply)
+    # Stash owner meta for the operator header — one registry read per inbound,
+    # not per poll.
+    rec = get_registry().get_by_phone(phone)
+    if rec:
+        store.set_owner_meta(phone, {"agent": rec.name, "goal": rec.active_goal,
+                                     "budget_cents": rec.budget_cents, "allowlist": rec.vendor_allowlist})
     return reply
 
 
@@ -42,15 +50,30 @@ def health() -> dict:
 
 
 @app.get("/", response_class=HTMLResponse)
+def landing() -> str:
+    """Judge-facing landing + in-browser interactive demo."""
+    return LANDING
+
+
+@app.get("/operator", response_class=HTMLResponse)
 def operator() -> str:
-    return PAGE
+    """Pure operator view (phone-driven three-up demo)."""
+    return OPERATOR
+
+
+@app.get("/explainer", response_class=HTMLResponse)
+def explainer() -> str:
+    """Self-contained interactive explainer (iframed into the landing page)."""
+    return EXPLAINER
 
 
 @app.get("/ops/data")
 def ops_data(phone: str | None = None) -> dict:
     """Feed for the operator view: the thread + transactions for one owner."""
     phone = phone or store.latest_phone()
-    return store.snapshot(phone, hash_phone(phone) if phone else None)
+    data = store.snapshot(phone, hash_phone(phone) if phone else None)
+    data["mode"] = config.stripe_mode  # simple | connect
+    return data
 
 
 class SimMessage(BaseModel):

@@ -61,8 +61,18 @@ async function tick(){
   const q = new URLSearchParams(location.search).get('phone');
   const r = await fetch('/ops/data'+(q?('?phone='+encodeURIComponent(q)):''));
   const d = await r.json();
-  document.getElementById('who').textContent =
-    d.phone ? ('owner: '+d.phone+'  ·  '+d.transactions.length+' actions') : 'waiting for activity…';
+  const o = d.owner || {};
+  if (d.phone) {
+    const goal = o.goal ? ('🎯 '+esc(o.goal)) : 'no active goal';
+    const bud  = (o.budget_cents!=null) ? ('budget $'+(o.budget_cents/100).toFixed(0)) : '';
+    const vend = o.allowlist ? ('vendors '+o.allowlist.map(esc).join(', ')) : '';
+    const parts = ['<b>'+esc(d.phone)+'</b>'];
+    if (o.agent) parts.push(esc(o.agent));
+    parts.push(goal, bud, vend, 'mode '+esc(d.mode||'simple'));
+    document.getElementById('who').innerHTML = parts.filter(Boolean).join('  ·  ');
+  } else {
+    document.getElementById('who').textContent = 'waiting for activity…';
+  }
   const chat = d.messages.map(m =>
     `<div class="bubble ${m.direction==='in'?'in':'out'}">${fmt(m.text)}<span class="t">${time(m.ts)}</span></div>`
   ).join('') || '<div class="empty">No messages yet.</div>';

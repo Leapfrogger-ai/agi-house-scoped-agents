@@ -13,6 +13,7 @@ from datetime import datetime, timezone
 _LOCK = threading.Lock()
 MESSAGES: deque[dict] = deque(maxlen=400)       # {ts, phone, direction: in|out, text}
 TRANSACTIONS: deque[dict] = deque(maxlen=200)   # audit events (allowed + denied)
+OWNER_META: dict[str, dict] = {}                # phone -> {agent, goal, budget_cents, allowlist}
 
 
 def _now() -> str:
@@ -29,6 +30,11 @@ def add_transaction(event: dict) -> None:
         TRANSACTIONS.append(event)
 
 
+def set_owner_meta(phone: str, meta: dict) -> None:
+    with _LOCK:
+        OWNER_META[phone] = meta
+
+
 def latest_phone() -> str | None:
     with _LOCK:
         for m in reversed(MESSAGES):
@@ -41,4 +47,5 @@ def snapshot(phone: str | None, hashed_phone: str | None) -> dict:
     with _LOCK:
         msgs = [m for m in MESSAGES if not phone or m["phone"] == phone]
         txns = [t for t in TRANSACTIONS if not hashed_phone or t.get("owner_phone") == hashed_phone]
-    return {"phone": phone, "messages": msgs, "transactions": txns}
+        owner = OWNER_META.get(phone) if phone else None
+    return {"phone": phone, "messages": msgs, "transactions": txns, "owner": owner}
